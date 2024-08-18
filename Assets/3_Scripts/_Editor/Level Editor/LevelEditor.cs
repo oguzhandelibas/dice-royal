@@ -13,7 +13,7 @@ namespace ODProjects.LevelEditor
 
         private LevelData[] _allLevelDatas;
         private LevelData _currentLevelData;
-        private TextureData _textureData;
+        private SpriteData _spriteData;
 
         #endregion
         
@@ -119,7 +119,7 @@ namespace ODProjects.LevelEditor
         {
             if (!_hasInitialize)
             {
-                _textureData = Resources.Load<TextureData>("ScriptableObjects/Data/TextureData");
+                _spriteData = Resources.Load<SpriteData>("ScriptableObjects/Data/TextureData");
                 if (!_currentLevelData.HasPath)
                 {
                     _currentLevelData.SetArray(_currentLevelData.gridSize.x * _currentLevelData.gridSize.y);
@@ -142,12 +142,13 @@ namespace ODProjects.LevelEditor
 
             EditorGUILayout.BeginVertical("box", GUILayout.Width(400));
             _currentLevelData = (LevelData)EditorGUILayout.ObjectField("Level Data", _currentLevelData, typeof(LevelData), false);
-            _textureData = (TextureData)EditorGUILayout.ObjectField("Texture Data", _textureData, typeof(TextureData), false);
+            _spriteData = (SpriteData)EditorGUILayout.ObjectField("Texture Data", _spriteData, typeof(SpriteData), false);
             EditorGUILayout.EndVertical();
             EditorGUILayout.BeginVertical("box", GUILayout.Width(100));
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.BeginVertical("box", GUILayout.Width(300));
             _selectedElement = (SelectedElement)EditorGUILayout.EnumPopup("Selected Element", _selectedElement);
+            
             _elementCount = EditorGUILayout.IntField("Element Count", _elementCount);
             
             EditorGUILayout.Space();
@@ -215,19 +216,21 @@ namespace ODProjects.LevelEditor
             
             GUI.color = Color.white;
 
-            for (int y = 0; y < _currentLevelData.gridSize.y; y++)
+            for (int y = _currentLevelData.gridSize.y - 1; y >= 0; y--)
             {
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.Space((position.width - totalWidth) / 2);
+    
                 for (int x = 0; x < _currentLevelData.gridSize.x; x++)
                 {
-                    int index = y * _currentLevelData.gridSize.x + x;
-                    
+                    int index = x * _currentLevelData.gridSize.y + y;
+
                     if (index >= 0 && index < _currentLevelData.ArrayLength())
                     {
-                        bool isInnerCell = x > 0 && x < _currentLevelData.gridSize.x - 1 && y > 0 && y < _currentLevelData.gridSize.y - 1;
+                        bool isInnerCell = y > 0 && y < _currentLevelData.gridSize.y - 1 &&
+                                           x > 0 && x < _currentLevelData.gridSize.x - 1;
 
-                        if (_currentLevelData.gridSize.x > 1 && isInnerCell)
+                        if (_currentLevelData.gridSize.y > 1 && isInnerCell)
                         {
                             GridButton(new GUIContent(""), index, false);
                         }
@@ -242,10 +245,12 @@ namespace ODProjects.LevelEditor
                 GUILayout.Space((position.width - totalWidth) / 2);
                 EditorGUILayout.EndHorizontal();
             }
+            
         }
 
         private void GridButton(GUIContent content, int index, bool active)
         {
+            _currentLevelData.ActivateElement(index,active);
             GUI.color = _currentLevelData.GetColor(index);
             content = _currentLevelData.GetContent(index);
 
@@ -274,7 +279,9 @@ namespace ODProjects.LevelEditor
                 }
                 else  // ADD
                 {
+                    if (_selectedElement != SelectedElement.Null && _elementCount == 0) _elementCount = 1;
                     content.text = _elementCount.ToString();
+                    
                     ChangeButtonState(content, _elementCount, index, _selectedElement);
                 }
             }
@@ -282,10 +289,11 @@ namespace ODProjects.LevelEditor
 
         private void ChangeButtonState(GUIContent content, int elementCount, int index, SelectedElement selectedElement)
         {
-            content.image = _textureData.GetTexture(selectedElement);
-            content.image.width = 50;
-            content.image.height = 50;
-            _currentLevelData.SetButtonColor(index, elementCount, content, selectedElement);
+            content.image = _spriteData.GetTexture(selectedElement);
+            //content.image.width = 30;
+            //content.image.height = 30;
+            Debug.Log($"Index: {index} Element Count: {elementCount} Selected Element: {selectedElement}");
+            _currentLevelData.SetElement(index, elementCount, content, selectedElement);
             string temp1 = content.text;
             content.text = temp1;
             /*

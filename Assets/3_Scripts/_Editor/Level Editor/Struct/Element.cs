@@ -10,6 +10,7 @@ namespace LevelEditor
         public SelectedElement selectedElement;
         public int elementCount;
 
+        public bool isActive;
         public bool hasElement;
 
         public GUIContent GuiContent;

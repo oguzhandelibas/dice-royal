@@ -30,13 +30,21 @@ namespace LevelEditor
         }
         public int ArrayLength() => Elements.Length;
         public bool ElementIsAvailable(int index) => Elements[index].selectedElement == SelectedElement.Null;
-        public void SetButtonColor(int index, int elementCount, GUIContent guiContent, SelectedElement selectedElement)
+
+        public void ActivateElement(int index, bool isActive)
+        {
+            Elements[index].isActive = isActive;
+        }
+        
+        [Obsolete("Obsolete")]
+        public void SetElement(int index, int elementCount, GUIContent guiContent, SelectedElement selectedElement)
         {
             if (!HasPath) HasPath = true;
             Elements[index].elementCount = elementCount;
             Elements[index].selectedElement = selectedElement;
             Elements[index].GuiContent = guiContent;
             Elements[index].hasElement = selectedElement != SelectedElement.Null;
+            SetDirty();
         }
         public GUIContent GetContent(int index) => Elements[index].GuiContent;
         public Color GetColor(int index)
