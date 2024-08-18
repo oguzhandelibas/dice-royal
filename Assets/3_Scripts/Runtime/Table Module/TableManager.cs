@@ -1,18 +1,32 @@
 using System;
 using LevelEditor;
 using UnityEngine;
+using Random = UnityEngine.Random;
+
+public record TableCreationData
+{
+    public int Row;
+    public int Column;
+    public int TileIndex;
+    public Vector2Int GridSize;
+    public Quaternion Rotation;
+    public float Spacing;
+}
 
 public class TableManager : MonoBehaviour
 {
     [Header("Level")]
     [SerializeField] private LevelType levelType;
+    [SerializeField] private LevelDataType levelDataType;
+    
     private LevelDatas _levelDatas;
     private LevelData _levelData;
     private Element[] _tableElements;
     
     [Header("Table Creation")]
     [SerializeField] private Transform tableParent;
-    [SerializeField] private TileBehaviour tileBehaviourPrefab;
+    [SerializeField] private TileBehaviour tileBehaviourPrefab; 
+    
     private void InitializeTable()
     {
         _levelDatas = SO_Manager.Get<LevelDatas>();
@@ -22,77 +36,198 @@ public class TableManager : MonoBehaviour
         CreateTables(gridSize, 1.05f);
     }
     
+    /* Optimization Test on CreateTables Method
     private void CreateTables(Vector2Int gridSize, float spacing)
     {
-        //foreach (Transform child in tablesParent) Destroy(child.gameObject);
-        //_tableBehaviours = new TableBehaviour[rows * columns];
-        int totalTileIndex = 0;
-        int activeTileIndex = 0;
-        
-
         int maxRow = gridSize.x;
         int maxColumn = gridSize.y;
         int index = 1;
-        
+
+        // Döngü parametrelerini belirleyen dizi (başlangıç, bitiş, adım, dönüş açısı)
+        (int startRow, int startColumn, int rowIncrement, int colIncrement, Quaternion rotation)[] loops =
+        {
+            (0, 0, 0, 1, Quaternion.Euler(0, 90, 0)),   // Sol kenar
+            (1, maxColumn - 1, 1, 0, Quaternion.Euler(0, 180, 0)),  // Üst kenar
+            (maxRow - 1, maxColumn - 2, 0, -1, Quaternion.Euler(0, 270, 0)),  // Sağ kenar
+            (maxRow - 2, 0, -1, 0, Quaternion.Euler(0, 0, 0))   // Alt kenar
+        };
+
+        foreach (var (startRow, startColumn, rowIncrement, colIncrement, rotation) in loops)
+        {
+            int row = startRow;
+            int column = startColumn;
+
+            while (row >= 0 && row < maxRow && column >= 0 && column < maxColumn)
+            {
+                var tableCreationData = new TableCreationData
+                {
+                    row = row,
+                    column = column,
+                    tileIndex = index,
+                    gridSize = gridSize,
+                    rotation = rotation,
+                    spacing = spacing
+                };
+
+                ProcessTile(tableCreationData);
+                index++;
+                row += rowIncrement;
+                column += colIncrement;
+            }
+        }
+    }
+    */
+    
+    private void CreateTables(Vector2Int gridSize, float spacing)
+    {
+        int maxRow = gridSize.x;
+        int maxColumn = gridSize.y;
+        int index = 1;
+        TableCreationData tableCreationData;
         for (int i = 0; i < maxColumn; i++) // Sol kenar (aşağıdan yukarıya)
         {
             int row = 0;
             int column = i;
-            ProcessTile(row, column, index, gridSize, Quaternion.Euler(0,90,0));
+            tableCreationData = new TableCreationData
+            {
+                Row = row,
+                Column = column,
+                TileIndex = index,
+                GridSize = gridSize,
+                Rotation = Quaternion.Euler(0,90,0),
+                Spacing = spacing
+            };
+            ProcessTile(tableCreationData);
             index++;
         }
-
+        if(levelType == LevelType.Line) return;
         for (int i = 1; i < maxRow; i++) // Üst kenar (soldan sağa)
         {
             int row = i;
             int column = maxColumn - 1;
-            ProcessTile(row, column, index, gridSize, Quaternion.Euler(0,180,0));
+            tableCreationData = new TableCreationData
+            {
+                Row = row,
+                Column = column,
+                TileIndex = index,
+                GridSize = gridSize,
+                Rotation = Quaternion.Euler(0,180,0),
+                Spacing = spacing
+            };
+            ProcessTile(tableCreationData);
             index++;
         }
-
         for (int i = maxColumn - 2; i >= 0; i--) // Sağ kenar (yukarıdan aşağıya)
         {
             int row = maxRow - 1;
             int column = i;
-            ProcessTile(row, column, index, gridSize, Quaternion.Euler(0,270,0));
+            tableCreationData = new TableCreationData
+            {
+                Row = row,
+                Column = column,
+                TileIndex = index,
+                GridSize = gridSize,
+                Rotation = Quaternion.Euler(0,270,0),
+                Spacing = spacing
+            };
+            ProcessTile(tableCreationData);
             index++;
         }
-
         for (int i = maxRow - 2; i > 0; i--) // Alt kenar (sağdan sola)
         {
             int row = i;
             int column = 0;
-            ProcessTile(row, column, index, gridSize, Quaternion.Euler(0,0,0));
+            tableCreationData = new TableCreationData
+            {
+                Row = row,
+                Column = column,
+                TileIndex = index,
+                GridSize = gridSize,
+                Rotation = Quaternion.Euler(0,0,0),
+                Spacing = spacing
+            };
+            ProcessTile(tableCreationData);
             index++;
         }
     }
     
-    private void ProcessTile(int row, int column, int tileIndex, Vector2Int gridSize, Quaternion rotation, float spacing = 1.05f)
+    private void ProcessTile(TableCreationData tableCreationData)
     {
         SpriteData spriteData = SO_Manager.Get<SpriteData>();
-        Element element = _tableElements[row * gridSize.x + column];
-    
+        
+        switch (levelDataType)
+        {
+            case LevelDataType.JSON:
+                ProcessTiles_SO(tableCreationData, spriteData);
+                break;
+            case LevelDataType.ScriptableObject:
+                ProcessTiles_SO(tableCreationData, spriteData);
+                break;
+            case LevelDataType.Random:
+                ProcessTiles_Random(tableCreationData, spriteData);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Creates tile according to Scriptable Object data.
+    /// </summary>
+    private void ProcessTiles_SO(TableCreationData tableCreationData, SpriteData spriteData)
+    {
+        Element element = _tableElements[tableCreationData.Row * tableCreationData.GridSize.x + tableCreationData.Column];
         if (element.isActive)
         {
             TileBehaviour tileBehaviourTemp = Instantiate(tileBehaviourPrefab, tableParent);
-            tileBehaviourTemp.transform.position = new Vector3(row * spacing, -0.4f, column * spacing);
-            tileBehaviourTemp.transform.rotation = rotation;
+            tileBehaviourTemp.transform.position = new Vector3(tableCreationData.Row * tableCreationData.Spacing, -0.4f, tableCreationData.Column * tableCreationData.Spacing);
+            tileBehaviourTemp.transform.rotation = tableCreationData.Rotation;
                 
             int elementCount = element.elementCount;
             Sprite elementSprite = spriteData.GetSprite(element.selectedElement);
             
             if (element.selectedElement == SelectedElement.Null)
             {
-                tileBehaviourTemp.InitializeTile(elementSprite, tileIndex, elementCount, true);
+                tileBehaviourTemp.InitializeTile(elementSprite, tableCreationData.TileIndex, elementCount, true);
             }
             else
             {
-                tileBehaviourTemp.InitializeTile(elementSprite, tileIndex, elementCount);
+                tileBehaviourTemp.InitializeTile(elementSprite, tableCreationData.TileIndex, elementCount);
             }
-            
-            
         }
     }
+
+    /// <summary>
+    /// Creates tile according to Random.
+    /// </summary>
+    private void ProcessTiles_Random(TableCreationData tableCreationData, SpriteData spriteData)
+    {
+        TileBehaviour tileBehaviourTemp = Instantiate(tileBehaviourPrefab, tableParent);
+        tileBehaviourTemp.transform.position = new Vector3(tableCreationData.Row * tableCreationData.Spacing, -0.4f, tableCreationData.Column * tableCreationData.Spacing);
+        tileBehaviourTemp.transform.rotation = tableCreationData.Rotation;
+                
+        int elementCount = Random.Range(1,26);
+        SelectedElement selectedElement = (SelectedElement) Random.Range(0, 4);
+        Sprite elementSprite = spriteData.GetSprite(selectedElement);
+
+        if (selectedElement == SelectedElement.Null || Random.Range(0,3) == 0)
+        {
+            tileBehaviourTemp.InitializeTile(elementSprite, tableCreationData.TileIndex, elementCount, true);
+        }
+        else
+        {
+            tileBehaviourTemp.InitializeTile(elementSprite, tableCreationData.TileIndex, elementCount);
+        }
+    }
+
+    /// <summary>
+    /// Creates tile according to JSON Data.
+    /// </summary>
+    private void ProcessTiles_JSON(TableCreationData tableCreationData, SpriteData spriteData)
+    {
+        throw new NotImplementedException();
+    }
+    
+    
+    #region EVETN SUBSCRIPTION
 
     private void OnEnable()
     { 
@@ -103,4 +238,7 @@ public class TableManager : MonoBehaviour
     {
         SO_Manager.Get<GameSignals>().OnGameStart -= InitializeTable;
     }
+
+    #endregion
+    
 }

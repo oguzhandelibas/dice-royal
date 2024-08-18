@@ -12,15 +12,15 @@ public class TileBehaviour : MonoBehaviour
     
     public void InitializeTile(Sprite sprite, int index, int elementCount, bool isEmpty = false)
     {
+        indexText.text = index.ToString();
         if (isEmpty)
         {
             tileImage.gameObject.SetActive(false);
-            indexText.gameObject.SetActive(false);
             elementCountText.gameObject.SetActive(false);
             return;
         }
         tileImage.sprite = sprite;
-        indexText.text = index.ToString();
+        
         elementCountText.text = elementCount.ToString();
     }
 }
