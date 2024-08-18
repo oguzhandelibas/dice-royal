@@ -81,7 +81,7 @@ namespace ODProjects.LevelEditor
         {
             LoadLevelDatas();
             
-            CheckPathAndInitialization();
+            
             _boxSize = 45;
 
             GUI.color = Color.white;
@@ -92,14 +92,16 @@ namespace ODProjects.LevelEditor
             EditorGUILayout.Space();
 
             if (_currentLevelData != null) Content();
+            CheckPathAndInitialization();
 
             EditorGUILayout.Space();
             EditorGUILayout.Space();
 
-            EditorGUILayout.EndScrollView(); // Scrollview'i sonlandır
+            EditorGUILayout.EndScrollView();
 
             GUI.color = Color.green;
             
+            /* NEW LEVEL BUTTON
             if (GUILayout.Button("CREATE NEW LEVEL", GUILayout.Height(40)))
             {
                 _currentLevelData = ScriptableObject.CreateInstance<LevelData>();
@@ -107,19 +109,20 @@ namespace ODProjects.LevelEditor
                 string[] assetPaths = Directory.GetFiles(levelDataFolder, "*.asset");
                 _selectedOption = assetPaths.Length;
 
-                string levelName = "LevelData"/* + (assetPaths.Length + 1)*/;
+                string levelName = "LevelData" + (assetPaths.Length + 1);
                 string path = levelDataFolder + levelName + ".asset";
+                
                 AssetDatabase.CreateAsset(_currentLevelData, path);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
-            }
+            }*/
         }
 
         private void CheckPathAndInitialization()
         {
             if (!_hasInitialize)
             {
-                _spriteData = Resources.Load<SpriteData>("ScriptableObjects/Data/TextureData");
+                _spriteData = Resources.Load<SpriteData>("ScriptableObjects/Data/SpriteData");
                 if (!_currentLevelData.HasPath)
                 {
                     _currentLevelData.SetArray(_currentLevelData.gridSize.x * _currentLevelData.gridSize.y);
@@ -142,7 +145,7 @@ namespace ODProjects.LevelEditor
 
             EditorGUILayout.BeginVertical("box", GUILayout.Width(400));
             _currentLevelData = (LevelData)EditorGUILayout.ObjectField("Level Data", _currentLevelData, typeof(LevelData), false);
-            _spriteData = (SpriteData)EditorGUILayout.ObjectField("Texture Data", _spriteData, typeof(SpriteData), false);
+            _spriteData = (SpriteData)EditorGUILayout.ObjectField("Sprite Data", _spriteData, typeof(SpriteData), false);
             EditorGUILayout.EndVertical();
             EditorGUILayout.BeginVertical("box", GUILayout.Width(100));
             EditorGUILayout.EndHorizontal();
