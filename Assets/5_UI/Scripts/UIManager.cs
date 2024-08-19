@@ -54,7 +54,6 @@ public class UIManager : AbstractSingleton<UIManager>
     /// <typeparam name="T">The View class to search for</typeparam>
     public void Show<T>(bool keepInHistory = true) where T : View
     {
-        Debug.Log($"MView Count: {m_Views.Count}");
         foreach (var view in m_Views)
         {
             if (view is T)
