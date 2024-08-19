@@ -25,13 +25,13 @@ public class DiceManager : MonoBehaviour
     private void OnEnable()
     {
         // Event subscription
-        SO_Manager.Get<GameSignals>().OnGameStart += Initialize;
+        //SO_Manager.Get<GameSignals>().OnGameStart += Initialize;
     }
     
     private void OnDisable()
     {
         // Event unsubscription
-        SO_Manager.Get<GameSignals>().OnGameStart -= Initialize;
+        //SO_Manager.Get<GameSignals>().OnGameStart -= Initialize;
     }
 
     #endregion

@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         _gameSignals = SO_Manager.Get<GameSignals>();
-        _gameSignals.OnGameStart?.Invoke();
+        
+        UIManager.Instance.Show<LoadingPanelView>();
+        _gameSignals.OnGameInitialize?.Invoke();
     }
 }

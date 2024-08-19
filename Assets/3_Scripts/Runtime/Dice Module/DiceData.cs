@@ -1,23 +1,30 @@
 using UnityEngine;
-using UnityEngine.Serialization;
-using Random = System.Random;
+using Random = UnityEngine.Random;
 
 [CreateAssetMenu(fileName = "DiceData", menuName = "ScriptableObjects/Data/DiceData", order = 1)]
 public class DiceData : ScriptableObject
 {
-    public int DiceCount
+    public DiceIndicatorType[] diceValues;
+
+    public void SetDiceValue(int index, int value)
     {
-        get => diceValues.Length;
-        set
+        diceValues[index] = (DiceIndicatorType) value;
+    }
+    
+    public void CreateEmptyDiceValues(int count)
+    {
+        diceValues = new DiceIndicatorType[count];
+        for (int i = 0; i < count; i++)
         {
-            diceValues = new DiceIndicatorType[value];
-            for (int i = 0; i < diceValues.Length; i++)
-            {
-                diceValues[i] = (DiceIndicatorType) new Random().Next(0, 6);
-            }
+            diceValues[i] = DiceIndicatorType.One;
         }
     }
-
-    public DiceIndicatorType[] diceValues;
     
+    public void CreateRandomDiceValues(int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            diceValues[i] = (DiceIndicatorType) Random.Range(0, 6);
+        }
+    }
 }
