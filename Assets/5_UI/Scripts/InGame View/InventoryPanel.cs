@@ -1,21 +1,29 @@
+using System.Collections.Generic;
 using LevelEditor;
 using UnityEngine;
 
 public class InventoryPanel : MonoBehaviour
 {
     [SerializeField] private Transform inventoryParent;
-    [SerializeField] private InventoryElement inventoryElementPrefab;
-
+    [SerializeField] private InventoryElementBehaviour inventoryElementBehaviourPrefab;
+    
+    private Dictionary<SelectedElement, InventoryElementBehaviour> _inventoryElements = new Dictionary<SelectedElement, InventoryElementBehaviour>();
+    private InventorySignals _inventorySignals;
+    
     private void Initialize()
     {
-        SpriteData spriteData = SO_Manager.Get<SpriteData>();
-
-        foreach (var sprite in spriteData.Sprites)
+        Dictionary<SelectedElement,InventoryElement> inventoryElements = SO_Manager.Get<InventorySignals>().GetInventoryElements?.Invoke();
+        foreach (var element in inventoryElements)
         {
-            if(sprite.Value == null) continue;
-            var element = Instantiate(inventoryElementPrefab, inventoryParent);
-            element.Initialize(sprite.Value, 3);
+            var inventoryElement = Instantiate(inventoryElementBehaviourPrefab, inventoryParent);
+            inventoryElement.Initialize(element.Value.icon, element.Value.count);
+            _inventoryElements.Add(element.Key, inventoryElement);
         }
+    }
+    
+    private void UpdateElements(SelectedElement arg1, int arg2)
+    {
+        _inventoryElements[arg1].AddElementCount(arg2);
     }
     
     #region EVENT SUBSCRIPTION
@@ -24,12 +32,14 @@ public class InventoryPanel : MonoBehaviour
     {
         // Event subscription
         SO_Manager.Get<GameSignals>().OnGameStart += Initialize;
+        SO_Manager.Get<InventorySignals>().AddInventoryElement += UpdateElements;
     }
-    
+
     private void OnDisable()
     {
         // Event unsubscription
         SO_Manager.Get<GameSignals>().OnGameStart -= Initialize;
+        SO_Manager.Get<InventorySignals>().AddInventoryElement -= UpdateElements;
     }
 
     #endregion

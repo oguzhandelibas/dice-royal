@@ -1747,7 +1747,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventoryParent: {fileID: 469981720}
-  inventoryElementPrefab: {fileID: 6297182154304100815, guid: 7d078337257844fce86814927c65fd0f, type: 3}
+  inventoryElementBehaviourPrefab: {fileID: 6297182154304100815, guid: 7d078337257844fce86814927c65fd0f, type: 3}
 --- !u!114 &469981725
 MonoBehaviour:
   m_ObjectHideFlags: 0

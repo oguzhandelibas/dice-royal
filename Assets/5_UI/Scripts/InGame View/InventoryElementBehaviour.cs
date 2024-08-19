@@ -2,19 +2,21 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InventoryElement : MonoBehaviour
+public class InventoryElementBehaviour : MonoBehaviour
 {
     [SerializeField] private Image elementIcon;
     [SerializeField] private TextMeshProUGUI elementCount;
+    private int _currentCount = 0;
 
     public void Initialize(Sprite icon, int count)
     {
         elementIcon.sprite = icon;
-        SetCount(count);
+        AddElementCount(count);
     }
-    
-    public void SetCount(int count)
+
+    public void AddElementCount(int count)
     {
-        elementCount.text = "X" + count.ToString();
+        _currentCount += count;
+        elementCount.text = "x" + _currentCount;
     }
 }

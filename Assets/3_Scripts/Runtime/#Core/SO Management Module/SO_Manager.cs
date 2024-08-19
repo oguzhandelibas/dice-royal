@@ -6,6 +6,7 @@ using UnityEngine;
 public enum SO_Type
 {
     GameSignals,
+    InventorySignals,
     LevelDatas,
     SpriteData,
     DiceData
@@ -16,6 +17,7 @@ public static class SO_Manager
     private static readonly Dictionary<SO_Type, string> Paths = new Dictionary<SO_Type, string>
     {
         { SO_Type.GameSignals, "ScriptableObjects/Signal/GameSignals"},
+        { SO_Type.InventorySignals, "ScriptableObjects/Signal/InventorySignals"},
         { SO_Type.LevelDatas, "ScriptableObjects/Data/LevelDatas"},
         { SO_Type.SpriteData, "ScriptableObjects/Data/SpriteData"},
         { SO_Type.DiceData, "ScriptableObjects/Data/DiceData"}
@@ -61,6 +63,8 @@ public static class SO_Manager
     {
         if (typeof(T) == typeof(GameSignals))
             return SO_Type.GameSignals;
+        if (typeof(T) == typeof(InventorySignals))
+            return SO_Type.InventorySignals;
         if (typeof(T) == typeof(LevelDatas))
             return SO_Type.LevelDatas;
         if (typeof(T) == typeof(SpriteData))
