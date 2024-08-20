@@ -49,7 +49,7 @@ namespace ODProjects.LevelEditor
 
         private void LoadLevelDatas()
         {
-            string levelDataFolder = "Assets/Resources/ScriptableObjects/Data/LevelData";
+            string levelDataFolder = "Assets/Resources/ScriptableObjects/LevelData";
             if (Directory.Exists(levelDataFolder))
             {
                 string[] assetPaths = Directory.GetFiles(levelDataFolder, "*.asset");

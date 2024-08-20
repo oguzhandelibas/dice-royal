@@ -78,6 +78,7 @@ public class TableManager : MonoBehaviour
     }
     */
     
+    // ReSharper disable Unity.PerformanceAnalysis
     private void CreateTables(Vector2Int gridSize, float spacing)
     {
         int maxRow = gridSize.x;
@@ -100,6 +101,7 @@ public class TableManager : MonoBehaviour
             ProcessTile(tableCreationData);
             index++;
         }
+        
         if(levelType == LevelType.Line) return;
         for (int i = 1; i < maxRow; i++) // Üst kenar (soldan sağa)
         {
@@ -157,15 +159,9 @@ public class TableManager : MonoBehaviour
         
         switch (levelDataType)
         {
-            case LevelDataType.JSON:
-                ProcessTiles_SO(tableCreationData, spriteData);
-                break;
-            case LevelDataType.ScriptableObject:
-                ProcessTiles_SO(tableCreationData, spriteData);
-                break;
-            case LevelDataType.Random:
-                ProcessTiles_Random(tableCreationData, spriteData);
-                break;
+            case LevelDataType.JSON: ProcessTiles_SO(tableCreationData, spriteData); break;
+            case LevelDataType.ScriptableObject: ProcessTiles_SO(tableCreationData, spriteData); break;
+            case LevelDataType.Random: ProcessTiles_Random(tableCreationData, spriteData); break;
         }
     }
 
@@ -175,48 +171,32 @@ public class TableManager : MonoBehaviour
     private void ProcessTiles_SO(TableCreationData tableCreationData, SpriteData spriteData)
     {
         Element element = _tableElements[tableCreationData.Row * tableCreationData.GridSize.x + tableCreationData.Column];
-        if (element.isActive)
-        {
-            TileBehaviour tileBehaviourTemp = Instantiate(tileBehaviourPrefab, tableParent);
-            tileBehaviourTemp.transform.position = new Vector3(tableCreationData.Row * tableCreationData.Spacing, -0.4f, tableCreationData.Column * tableCreationData.Spacing);
-            tileBehaviourTemp.transform.rotation = tableCreationData.Rotation;
-                
-            int elementCount = element.elementCount;
-            Sprite elementSprite = spriteData.GetSprite(element.selectedElement);
-            
-            if (element.selectedElement == SelectedElement.Null)
-            {
-                tileBehaviourTemp.InitializeTile(elementSprite, tableCreationData.TileIndex, elementCount, true);
-            }
-            else
-            {
-                tileBehaviourTemp.InitializeTile(elementSprite, tableCreationData.TileIndex, elementCount);
-            }
-        }
+        if (!element.isActive) return;
+        
+        Sprite elementSprite = spriteData.GetSprite(element.selectedElement);
+        bool isEmpty = element.selectedElement == SelectedElement.Null;
+        Vector3 position = new Vector3(tableCreationData.Row * tableCreationData.Spacing, -0.4f, tableCreationData.Column * tableCreationData.Spacing);
+        
+        TileBehaviour tileBehaviourTemp = Instantiate(tileBehaviourPrefab, position, tableCreationData.Rotation, tableParent);
+        tileBehaviourTemp.InitializeTile(elementSprite, tableCreationData.TileIndex, element.elementCount, isEmpty);
     }
+
 
     /// <summary>
     /// Creates tile according to Random.
     /// </summary>
     private void ProcessTiles_Random(TableCreationData tableCreationData, SpriteData spriteData)
     {
-        TileBehaviour tileBehaviourTemp = Instantiate(tileBehaviourPrefab, tableParent);
-        tileBehaviourTemp.transform.position = new Vector3(tableCreationData.Row * tableCreationData.Spacing, -0.4f, tableCreationData.Column * tableCreationData.Spacing);
-        tileBehaviourTemp.transform.rotation = tableCreationData.Rotation;
-                
-        int elementCount = Random.Range(1,26);
-        SelectedElement selectedElement = (SelectedElement) Random.Range(0, 4);
+        SelectedElement selectedElement = (SelectedElement)Random.Range(0, 4);
         Sprite elementSprite = spriteData.GetSprite(selectedElement);
-
-        if (selectedElement == SelectedElement.Null || Random.Range(0,3) == 0)
-        {
-            tileBehaviourTemp.InitializeTile(elementSprite, tableCreationData.TileIndex, elementCount, true);
-        }
-        else
-        {
-            tileBehaviourTemp.InitializeTile(elementSprite, tableCreationData.TileIndex, elementCount);
-        }
+        int elementCount = Random.Range(1, 26);
+        bool isEmpty = selectedElement == SelectedElement.Null || Random.Range(0, 3) == 0;
+        Vector3 position = new Vector3(tableCreationData.Row * tableCreationData.Spacing, -0.4f, tableCreationData.Column * tableCreationData.Spacing);
+        
+        TileBehaviour tileBehaviourTemp = Instantiate(tileBehaviourPrefab, position, tableCreationData.Rotation, tableParent);
+        tileBehaviourTemp.InitializeTile(elementSprite, tableCreationData.TileIndex, elementCount, isEmpty);
     }
+
 
     /// <summary>
     /// Creates tile according to JSON Data.
