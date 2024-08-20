@@ -7,6 +7,8 @@ public enum SO_Type
 {
     GameSignals,
     InventorySignals,
+    PlayerSignals,
+    DiceSignals,
     LevelDatas,
     SpriteData,
     DiceData
@@ -18,6 +20,8 @@ public static class SO_Manager
     {
         { SO_Type.GameSignals, "ScriptableObjects/Signal/GameSignals"},
         { SO_Type.InventorySignals, "ScriptableObjects/Signal/InventorySignals"},
+        { SO_Type.PlayerSignals, "ScriptableObjects/Signal/PlayerSignals"},
+        { SO_Type.DiceSignals, "ScriptableObjects/Signal/DiceSignals"},
         { SO_Type.LevelDatas, "ScriptableObjects/Data/LevelDatas"},
         { SO_Type.SpriteData, "ScriptableObjects/Data/SpriteData"},
         { SO_Type.DiceData, "ScriptableObjects/Data/DiceData"}
@@ -65,6 +69,10 @@ public static class SO_Manager
             return SO_Type.GameSignals;
         if (typeof(T) == typeof(InventorySignals))
             return SO_Type.InventorySignals;
+        if (typeof(T) == typeof(PlayerSignals))
+            return SO_Type.PlayerSignals;
+        if (typeof(T) == typeof(DiceSignals))
+            return SO_Type.DiceSignals;
         if (typeof(T) == typeof(LevelDatas))
             return SO_Type.LevelDatas;
         if (typeof(T) == typeof(SpriteData))

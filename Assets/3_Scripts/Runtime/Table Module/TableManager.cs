@@ -15,18 +15,20 @@ public record TableCreationData
 
 public class TableManager : MonoBehaviour
 {
-    [Header("Level")]
-    [SerializeField] private LevelType levelType;
+    [Header("Level")] [SerializeField] private LevelType levelType;
     [SerializeField] private LevelDataType levelDataType;
-    
+
     private LevelDatas _levelDatas;
     private LevelData _levelData;
     private Element[] _tableElements;
-    
-    [Header("Table Creation")]
-    [SerializeField] private Transform tableParent;
-    [SerializeField] private TileBehaviour tileBehaviourPrefab; 
-    
+
+    public Vector3[] _tilePositions;
+
+    [Header("Table Creation")] [SerializeField]
+    private Transform tableParent;
+
+    [SerializeField] private TileBehaviour tileBehaviourPrefab;
+
     private void InitializeTable()
     {
         _levelDatas = SO_Manager.Get<LevelDatas>();
@@ -35,7 +37,7 @@ public class TableManager : MonoBehaviour
         _tableElements = _levelData.Elements;
         CreateTables(gridSize, 1.05f);
     }
-    
+
     /* Optimization Test on CreateTables Method
     private void CreateTables(Vector2Int gridSize, float spacing)
     {
@@ -77,10 +79,11 @@ public class TableManager : MonoBehaviour
         }
     }
     */
-    
+
     // ReSharper disable Unity.PerformanceAnalysis
     private void CreateTables(Vector2Int gridSize, float spacing)
     {
+        _tilePositions = new Vector3[gridSize.x * gridSize.y];
         int maxRow = gridSize.x;
         int maxColumn = gridSize.y;
         int index = 1;
@@ -95,14 +98,19 @@ public class TableManager : MonoBehaviour
                 Column = column,
                 TileIndex = index,
                 GridSize = gridSize,
-                Rotation = Quaternion.Euler(0,90,0),
+                Rotation = Quaternion.Euler(0, 90, 0),
                 Spacing = spacing
             };
             ProcessTile(tableCreationData);
             index++;
         }
         
-        if(levelType == LevelType.Line) return;
+        PlayerSignals playerSignals = SO_Manager.Get<PlayerSignals>();
+        if (levelType == LevelType.Line)
+        {
+            playerSignals.OnGameReadyToPlay?.Invoke(_tilePositions);
+            return;
+        }
         for (int i = 1; i < maxRow; i++) // Üst kenar (soldan sağa)
         {
             int row = i;
@@ -113,12 +121,13 @@ public class TableManager : MonoBehaviour
                 Column = column,
                 TileIndex = index,
                 GridSize = gridSize,
-                Rotation = Quaternion.Euler(0,180,0),
+                Rotation = Quaternion.Euler(0, 180, 0),
                 Spacing = spacing
             };
             ProcessTile(tableCreationData);
             index++;
         }
+
         for (int i = maxColumn - 2; i >= 0; i--) // Sağ kenar (yukarıdan aşağıya)
         {
             int row = maxRow - 1;
@@ -129,12 +138,13 @@ public class TableManager : MonoBehaviour
                 Column = column,
                 TileIndex = index,
                 GridSize = gridSize,
-                Rotation = Quaternion.Euler(0,270,0),
+                Rotation = Quaternion.Euler(0, 270, 0),
                 Spacing = spacing
             };
             ProcessTile(tableCreationData);
             index++;
         }
+
         for (int i = maxRow - 2; i > 0; i--) // Alt kenar (sağdan sola)
         {
             int row = i;
@@ -145,23 +155,30 @@ public class TableManager : MonoBehaviour
                 Column = column,
                 TileIndex = index,
                 GridSize = gridSize,
-                Rotation = Quaternion.Euler(0,0,0),
+                Rotation = Quaternion.Euler(0, 0, 0),
                 Spacing = spacing
             };
             ProcessTile(tableCreationData);
             index++;
         }
+        playerSignals.OnGameReadyToPlay?.Invoke(_tilePositions);
     }
-    
+
     private void ProcessTile(TableCreationData tableCreationData)
     {
         SpriteData spriteData = SO_Manager.Get<SpriteData>();
-        
+
         switch (levelDataType)
         {
-            case LevelDataType.JSON: ProcessTiles_SO(tableCreationData, spriteData); break;
-            case LevelDataType.ScriptableObject: ProcessTiles_SO(tableCreationData, spriteData); break;
-            case LevelDataType.Random: ProcessTiles_Random(tableCreationData, spriteData); break;
+            case LevelDataType.JSON:
+                ProcessTiles_SO(tableCreationData, spriteData);
+                break;
+            case LevelDataType.ScriptableObject:
+                ProcessTiles_SO(tableCreationData, spriteData);
+                break;
+            case LevelDataType.Random:
+                ProcessTiles_Random(tableCreationData, spriteData);
+                break;
         }
     }
 
@@ -170,14 +187,18 @@ public class TableManager : MonoBehaviour
     /// </summary>
     private void ProcessTiles_SO(TableCreationData tableCreationData, SpriteData spriteData)
     {
-        Element element = _tableElements[tableCreationData.Row * tableCreationData.GridSize.x + tableCreationData.Column];
+        Element element =
+            _tableElements[tableCreationData.Row * tableCreationData.GridSize.x + tableCreationData.Column];
         if (!element.isActive) return;
-        
+
         Sprite elementSprite = spriteData.GetSprite(element.selectedElement);
         bool isEmpty = element.selectedElement == SelectedElement.Null;
-        Vector3 position = new Vector3(tableCreationData.Row * tableCreationData.Spacing, -0.4f, tableCreationData.Column * tableCreationData.Spacing);
-        
-        TileBehaviour tileBehaviourTemp = Instantiate(tileBehaviourPrefab, position, tableCreationData.Rotation, tableParent);
+        Vector3 position = new Vector3(tableCreationData.Row * tableCreationData.Spacing, -0.4f,
+            tableCreationData.Column * tableCreationData.Spacing);
+        _tilePositions[tableCreationData.TileIndex - 1] = position;
+
+        TileBehaviour tileBehaviourTemp =
+            Instantiate(tileBehaviourPrefab, position, tableCreationData.Rotation, tableParent);
         tileBehaviourTemp.InitializeTile(elementSprite, tableCreationData.TileIndex, element.elementCount, isEmpty);
     }
 
@@ -191,9 +212,12 @@ public class TableManager : MonoBehaviour
         Sprite elementSprite = spriteData.GetSprite(selectedElement);
         int elementCount = Random.Range(1, 26);
         bool isEmpty = selectedElement == SelectedElement.Null || Random.Range(0, 3) == 0;
-        Vector3 position = new Vector3(tableCreationData.Row * tableCreationData.Spacing, -0.4f, tableCreationData.Column * tableCreationData.Spacing);
-        
-        TileBehaviour tileBehaviourTemp = Instantiate(tileBehaviourPrefab, position, tableCreationData.Rotation, tableParent);
+        Vector3 position = new Vector3(tableCreationData.Row * tableCreationData.Spacing, -0.4f,
+            tableCreationData.Column * tableCreationData.Spacing);
+        _tilePositions[tableCreationData.TileIndex - 1] = position;
+
+        TileBehaviour tileBehaviourTemp =
+            Instantiate(tileBehaviourPrefab, position, tableCreationData.Rotation, tableParent);
         tileBehaviourTemp.InitializeTile(elementSprite, tableCreationData.TileIndex, elementCount, isEmpty);
     }
 
@@ -205,20 +229,20 @@ public class TableManager : MonoBehaviour
     {
         throw new NotImplementedException();
     }
-    
-    
+
     #region EVETN SUBSCRIPTION
 
     private void OnEnable()
-    { 
-        SO_Manager.Get<GameSignals>().OnGameStart += InitializeTable;
+    {
+        GameSignals gameSignals = SO_Manager.Get<GameSignals>();
+        gameSignals.OnGameStart += InitializeTable;
     }
 
     private void OnDisable()
     {
-        SO_Manager.Get<GameSignals>().OnGameStart -= InitializeTable;
+        GameSignals gameSignals = SO_Manager.Get<GameSignals>();
+        gameSignals.OnGameStart -= InitializeTable;
     }
 
     #endregion
-    
 }

@@ -48,6 +48,8 @@ public class DiceSettingsPanel : MonoBehaviour
         diceCountDropdown.onValueChanged.AddListener(OnDiceCountClick);
         diceIndexDropdown.onValueChanged.AddListener(OnDiceIndexClick);
         diceValueDropdown.onValueChanged.AddListener(OnDiceValueClick);
+        
+        SO_Manager.Get<DiceSignals>().InitializeDices?.Invoke();
     }
 
     #region Listeners
@@ -58,6 +60,7 @@ public class DiceSettingsPanel : MonoBehaviour
         _diceData.CreateEmptyDiceValues(value);
         SetDiceIndexDropdown(value);
         diceValueDropdown.value = (int)_diceData.diceValues[0];
+        SO_Manager.Get<DiceSignals>().InitializeDices?.Invoke();
     }
     
     private void OnDiceIndexClick(int value)
@@ -78,6 +81,7 @@ public class DiceSettingsPanel : MonoBehaviour
     private void SetDiceCountDropdown(int value)
     {
         SetDropdown(diceCountDropdown, value);
+        
     }
     
     private void SetDiceIndexDropdown(int value)
