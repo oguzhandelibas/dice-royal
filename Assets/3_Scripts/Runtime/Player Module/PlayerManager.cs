@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
@@ -13,10 +14,10 @@ public class PlayerManager : MonoBehaviour
         playerType = type;
     }
     
-    private void InitializePlayer(Vector3[] positions)
+    private void InitializePlayer(List<TileData> tileDatas)
     {
         PlayerBehaviour player = Instantiate(playerPrefab, playerParent);
-        player.Initialize(playerType, positions);
+        player.Initialize(playerType, tileDatas);
         _playerSignals.PlayerInitialized?.Invoke(player.transform);
     }
 

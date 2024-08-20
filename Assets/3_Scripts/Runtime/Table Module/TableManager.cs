@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using LevelEditor;
+using ODProjects;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -13,6 +15,13 @@ public record TableCreationData
     public float Spacing;
 }
 
+public record TileData
+{
+    public Vector3 Position;
+    public SelectedElement SelectedElement;
+    public int ElementCount;
+}
+
 public class TableManager : MonoBehaviour
 {
     [Header("Level")] [SerializeField] private LevelType levelType;
@@ -22,7 +31,7 @@ public class TableManager : MonoBehaviour
     private LevelData _levelData;
     private Element[] _tableElements;
 
-    public Vector3[] _tilePositions;
+    private List<TileData> _tileDatas = new List<TileData>();
 
     [Header("Table Creation")] [SerializeField]
     private Transform tableParent;
@@ -83,7 +92,6 @@ public class TableManager : MonoBehaviour
     // ReSharper disable Unity.PerformanceAnalysis
     private void CreateTables(Vector2Int gridSize, float spacing)
     {
-        _tilePositions = new Vector3[gridSize.x * gridSize.y];
         int maxRow = gridSize.x;
         int maxColumn = gridSize.y;
         int index = 1;
@@ -108,7 +116,7 @@ public class TableManager : MonoBehaviour
         PlayerSignals playerSignals = SO_Manager.Get<PlayerSignals>();
         if (levelType == LevelType.Line)
         {
-            playerSignals.OnGameReadyToPlay?.Invoke(_tilePositions);
+            playerSignals.OnGameReadyToPlay?.Invoke(_tileDatas);
             return;
         }
         for (int i = 1; i < maxRow; i++) // Üst kenar (soldan sağa)
@@ -161,7 +169,7 @@ public class TableManager : MonoBehaviour
             ProcessTile(tableCreationData);
             index++;
         }
-        playerSignals.OnGameReadyToPlay?.Invoke(_tilePositions);
+        playerSignals.OnGameReadyToPlay?.Invoke(_tileDatas);
     }
 
     private void ProcessTile(TableCreationData tableCreationData)
@@ -187,18 +195,22 @@ public class TableManager : MonoBehaviour
     /// </summary>
     private void ProcessTiles_SO(TableCreationData tableCreationData, SpriteData spriteData)
     {
-        Element element =
-            _tableElements[tableCreationData.Row * tableCreationData.GridSize.x + tableCreationData.Column];
+        Element element = _tableElements[tableCreationData.Row * tableCreationData.GridSize.x + tableCreationData.Column];
         if (!element.isActive) return;
 
         Sprite elementSprite = spriteData.GetSprite(element.selectedElement);
         bool isEmpty = element.selectedElement == SelectedElement.Null;
         Vector3 position = new Vector3(tableCreationData.Row * tableCreationData.Spacing, -0.4f,
             tableCreationData.Column * tableCreationData.Spacing);
-        _tilePositions[tableCreationData.TileIndex - 1] = position;
 
-        TileBehaviour tileBehaviourTemp =
-            Instantiate(tileBehaviourPrefab, position, tableCreationData.Rotation, tableParent);
+        _tileDatas.Add(new TileData
+        {
+            Position = position,
+            SelectedElement = element.selectedElement,
+            ElementCount = element.elementCount
+        });
+
+        TileBehaviour tileBehaviourTemp = Instantiate(tileBehaviourPrefab, position, tableCreationData.Rotation, tableParent);
         tileBehaviourTemp.InitializeTile(elementSprite, tableCreationData.TileIndex, element.elementCount, isEmpty);
     }
 
@@ -214,7 +226,12 @@ public class TableManager : MonoBehaviour
         bool isEmpty = selectedElement == SelectedElement.Null || Random.Range(0, 3) == 0;
         Vector3 position = new Vector3(tableCreationData.Row * tableCreationData.Spacing, -0.4f,
             tableCreationData.Column * tableCreationData.Spacing);
-        _tilePositions[tableCreationData.TileIndex - 1] = position;
+        _tileDatas.Add(new TileData
+        {
+            Position = position,
+            SelectedElement = selectedElement,
+            ElementCount = elementCount
+        });
 
         TileBehaviour tileBehaviourTemp =
             Instantiate(tileBehaviourPrefab, position, tableCreationData.Rotation, tableParent);

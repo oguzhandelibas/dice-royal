@@ -1110,7 +1110,7 @@ Camera:
   far clip plane: 100
   field of view: 60
   orthographic: 1
-  orthographic size: 5.5
+  orthographic size: 7.5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -2622,6 +2622,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 627554992}
   m_CullTransparentMesh: 1
+--- !u!1 &631775582
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 631775583}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &631775583
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 631775582}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.78, y: 0, z: 6.69}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &657433574
 GameObject:
   m_ObjectHideFlags: 0
@@ -5847,7 +5878,6 @@ MonoBehaviour:
   diceBehaviourPrefab: {fileID: 204307603710519310, guid: 1d8da80caae5c4c41a03be0912fcea60, type: 3}
   diceData: {fileID: 11400000, guid: ae90098c59f8c418081bad8d3a6403a6, type: 2}
   diceRotationData: {fileID: 11400000, guid: 38122bdeb474243b090fd62eb6f1eb36, type: 2}
-  rollForce: {x: 0, y: 3, z: 3}
 --- !u!1 &1401321041
 GameObject:
   m_ObjectHideFlags: 0
@@ -7190,7 +7220,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   followSpeed: 5
-  XZ_Offset: {x: -5.08, y: -3.58}
+  XZ_Offset: {x: -4, y: -3.58}
 --- !u!1 &1751741564
 GameObject:
   m_ObjectHideFlags: 0
@@ -7605,8 +7635,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelType: 0
-  levelDataType: 2
-  _tilePositions: []
+  levelDataType: 1
   tableParent: {fileID: 1005782225}
   tileBehaviourPrefab: {fileID: 7091869786494123806, guid: ee9e054f373904537bea1fda88d69d97, type: 3}
 --- !u!1 &1869269900
@@ -8960,3 +8989,4 @@ SceneRoots:
   - {fileID: 1615834364}
   - {fileID: 235110140}
   - {fileID: 496913041}
+  - {fileID: 631775583}

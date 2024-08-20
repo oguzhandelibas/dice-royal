@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 840f13c1734c349c4a2795283cfdef9f, type: 3}
   m_Name: DiceData
   m_EditorClassIdentifier: 
-  diceValues: 01000000
+  diceValues: 050000000500000005000000050000000500000005000000050000000500000005000000
