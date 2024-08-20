@@ -6,7 +6,8 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private PlayerType playerType;
     [SerializeField] private PlayerBehaviour playerPrefab;
     [SerializeField] private Transform playerParent;
-    private bool onMovement = false;
+    private bool _onMovement = false;
+    private PlayerSignals _playerSignals;
     public void SetPlayerType(PlayerType type)
     {
         playerType = type;
@@ -16,19 +17,20 @@ public class PlayerManager : MonoBehaviour
     {
         PlayerBehaviour player = Instantiate(playerPrefab, playerParent);
         player.Initialize(playerType, positions);
+        _playerSignals.PlayerInitialized?.Invoke(player.transform);
     }
 
     private void MovePlayer()
     {
-        if(onMovement) return;
+        if(_onMovement) return;
         int moveCount = diceManager.totalDiceValue;
-        SO_Manager.Get<PlayerSignals>().MoveTargetPosition?.Invoke(moveCount);
-        onMovement = true;
+        _playerSignals.MoveTargetPosition?.Invoke(moveCount);
+        _onMovement = true;
     }
 
     private void MovementCompleted(bool isCompleted)
     {
-        onMovement = !isCompleted;
+        _onMovement = !isCompleted;
     }
     
     
@@ -36,18 +38,17 @@ public class PlayerManager : MonoBehaviour
 
     private void OnEnable()
     {
-        PlayerSignals playerSignals = SO_Manager.Get<PlayerSignals>();
-        playerSignals.InitializeMovement += MovePlayer;
-        playerSignals.MovementComplete += MovementCompleted;
-        playerSignals.OnGameReadyToPlay += InitializePlayer;
+        _playerSignals = SO_Manager.Get<PlayerSignals>();
+        _playerSignals.InitializeMovement += MovePlayer;
+        _playerSignals.MovementComplete += MovementCompleted;
+        _playerSignals.OnGameReadyToPlay += InitializePlayer;
     }
 
     private void OnDisable()
     {
-        PlayerSignals playerSignals = SO_Manager.Get<PlayerSignals>();
-        playerSignals.InitializeMovement -= MovePlayer;
-        playerSignals.MovementComplete -= MovementCompleted;
-        playerSignals.OnGameReadyToPlay -= InitializePlayer;
+        _playerSignals.InitializeMovement -= MovePlayer;
+        _playerSignals.MovementComplete -= MovementCompleted;
+        _playerSignals.OnGameReadyToPlay -= InitializePlayer;
     }
 
     #endregion
