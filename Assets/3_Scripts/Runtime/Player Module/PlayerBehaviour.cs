@@ -40,6 +40,13 @@ public class PlayerBehaviour : MonoBehaviour
         {
             inventorySignals.AddInventoryElement?.Invoke(tileData.SelectedElement, tileData.ElementCount);
             Debug.Log("Movement completed: " + tileData.SelectedElement + " " + tileData.ElementCount);
+            AudioManager.Instance.PlayAudioEffect(AudioType.InventoryCollect);
+            GameObject effect = EffectManager.Instance.GetEffect(EffectType.CollectFlash);
+            Instantiate(effect, transform.position+(Vector3.up), Quaternion.Euler(0,0,0));
+        }
+        else
+        {
+            AudioManager.Instance.PlayAudioEffect(AudioType.EmptyTile);
         }
     }
 
@@ -49,6 +56,7 @@ public class PlayerBehaviour : MonoBehaviour
         if (_currentIndex >= _tileDatas.Count)
         {
             _currentIndex = 0;
+            AudioManager.Instance.PlayAudioEffect(AudioType.DummyFly);
         }
 
         return _currentIndex;
@@ -59,15 +67,19 @@ public class PlayerBehaviour : MonoBehaviour
         float elapsedTime = 0f;
         float duration = 0.5f;
         float jumpHeight = 1.0f;
-
+        
+        TileData tileData = _tileDatas[GetCurrentIndex()];
+        
         Vector3 originalScale = transform.localScale;
         Vector3 jumpScale = originalScale * 1.2f;
-        Vector3 targetPosition = _tileDatas[GetCurrentIndex()].Position + new Vector3(0, 0.77f, 0);
+        Vector3 targetPosition = tileData.Position + new Vector3(0, 0.77f, 0);
         Vector3 startPosition = transform.position;
 
         Vector3 difference = targetPosition - startPosition;
         CalculatePlayerDirection(difference);
-
+        AudioManager.Instance.PlayAudioEffect(AudioType.DummyJump);
+        GameObject effect = EffectManager.Instance.GetEffect(EffectType.JumpEffect);
+        Instantiate(effect, transform.position+(Vector3.up*.15f), Quaternion.Euler(90,0,0));
         while (elapsedTime < duration)
         {
             float progress = elapsedTime / duration;
@@ -82,7 +94,9 @@ public class PlayerBehaviour : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-
+        AudioManager.Instance.PlayAudioEffect(AudioType.DummyLand);
+        tileData.TileBehaviour.BlinkTileTopPlane();
+        
         transform.position = targetPosition;
         transform.localScale = originalScale;
     }
@@ -90,24 +104,9 @@ public class PlayerBehaviour : MonoBehaviour
     private void CalculatePlayerDirection(Vector3 difference)
     {
         _playerDirection = PlayerDirection.Forward;
-        // Eğer fark çok küçükse, hareket etmediğini varsayıyoruz.
-        if (difference.magnitude < 0.1f)
-        {
-            _playerDirection = PlayerDirection.Forward; // Default değer, yönsüz durum.
-        }
-
-        // Yatay eksende (X) daha büyük fark varsa, sola veya sağa hareket ediyor.
-        if (Mathf.Abs(difference.x) > Mathf.Abs(difference.z))
-        {
-            _playerDirection = difference.x > 0 ? PlayerDirection.Right : // Sağ tarafa hareket
-                PlayerDirection.Left; // Sol tarafa hareket
-        }
-        // Dikey eksende (Z) daha büyük fark varsa, ileriye veya geriye hareket ediyor.
-        else
-        {
-            _playerDirection = difference.z > 0 ? PlayerDirection.Forward : // İleriye hareket
-                PlayerDirection.Backward; // Geriye hareket
-        }
+        if (difference.magnitude < 0.1f) _playerDirection = PlayerDirection.Forward;
+        if (Mathf.Abs(difference.x) > Mathf.Abs(difference.z)) _playerDirection = difference.x > 0 ? PlayerDirection.Right : PlayerDirection.Left;
+        else _playerDirection = difference.z > 0 ? PlayerDirection.Forward : PlayerDirection.Backward;
     }
 
     private Transform GetPlayerTransform() => transform;

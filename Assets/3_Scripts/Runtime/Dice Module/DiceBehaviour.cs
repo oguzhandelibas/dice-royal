@@ -14,6 +14,9 @@ public class DiceBehaviour : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
+        AudioManager.Instance.PlayAudioEffect(AudioType.DiceCollision);
+        GameObject effect = EffectManager.Instance.GetEffect(EffectType.DiceCollision);
+        Instantiate(effect, transform.position, Quaternion.identity);
         StartCoroutine(RollRoutine(_desiredFinalRotation));
     }
 

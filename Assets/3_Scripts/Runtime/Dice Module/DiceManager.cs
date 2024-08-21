@@ -38,6 +38,7 @@ public class DiceManager : MonoBehaviour
     private async void RollDices()
     {
         Debug.Log("Rolling dices...");
+        AudioManager.Instance.PlayAudioEffect(AudioType.DiceRoll);
         
         PlayerSignals playerSignals = SO_Manager.Get<PlayerSignals>();
         Transform playerTransform = (Transform) playerSignals.GetPlayerTransform?.Invoke();

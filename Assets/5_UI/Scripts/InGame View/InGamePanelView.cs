@@ -7,10 +7,12 @@ public class InGamePanelView : View
     
     private void Start()
     {
+        AudioManager.Instance.PlayAudioEffect(AudioType.CloudEffect);
         goButton.onClick.AddListener(_GoButton);
     }
     private void _GoButton()
     {
+        AudioManager.Instance.PlayAudioEffect(AudioType.ButtonClick);
         SO_Manager.Get<DiceSignals>().RollDices?.Invoke();
         goButton.interactable = false;
     }

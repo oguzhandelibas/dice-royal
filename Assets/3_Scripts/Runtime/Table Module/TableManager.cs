@@ -17,6 +17,7 @@ public record TableCreationData
 
 public record TileData
 {
+    public TileBehaviour TileBehaviour;
     public Vector3 Position;
     public SelectedElement SelectedElement;
     public int ElementCount;
@@ -203,15 +204,16 @@ public class TableManager : MonoBehaviour
         Vector3 position = new Vector3(tableCreationData.Row * tableCreationData.Spacing, -0.4f,
             tableCreationData.Column * tableCreationData.Spacing);
 
+        TileBehaviour tileBehaviourTemp = Instantiate(tileBehaviourPrefab, position, tableCreationData.Rotation, tableParent);
+        tileBehaviourTemp.InitializeTile(elementSprite, tableCreationData.TileIndex, element.elementCount, isEmpty);
+        
         _tileDatas.Add(new TileData
         {
+            TileBehaviour = tileBehaviourTemp,
             Position = position,
             SelectedElement = element.selectedElement,
             ElementCount = element.elementCount
         });
-
-        TileBehaviour tileBehaviourTemp = Instantiate(tileBehaviourPrefab, position, tableCreationData.Rotation, tableParent);
-        tileBehaviourTemp.InitializeTile(elementSprite, tableCreationData.TileIndex, element.elementCount, isEmpty);
     }
 
 
@@ -226,16 +228,17 @@ public class TableManager : MonoBehaviour
         bool isEmpty = selectedElement == SelectedElement.Null || Random.Range(0, 3) == 0;
         Vector3 position = new Vector3(tableCreationData.Row * tableCreationData.Spacing, -0.4f,
             tableCreationData.Column * tableCreationData.Spacing);
+        
+        TileBehaviour tileBehaviourTemp = Instantiate(tileBehaviourPrefab, position, tableCreationData.Rotation, tableParent);
+        tileBehaviourTemp.InitializeTile(elementSprite, tableCreationData.TileIndex, elementCount, isEmpty);
+        
         _tileDatas.Add(new TileData
         {
+            TileBehaviour = tileBehaviourTemp,
             Position = position,
             SelectedElement = selectedElement,
             ElementCount = elementCount
         });
-
-        TileBehaviour tileBehaviourTemp =
-            Instantiate(tileBehaviourPrefab, position, tableCreationData.Rotation, tableParent);
-        tileBehaviourTemp.InitializeTile(elementSprite, tableCreationData.TileIndex, elementCount, isEmpty);
     }
 
 

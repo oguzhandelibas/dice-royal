@@ -61,17 +61,20 @@ public class DiceSettingsPanel : MonoBehaviour
         SetDiceIndexDropdown(value);
         diceValueDropdown.value = (int)_diceData.diceValues[0];
         SO_Manager.Get<DiceSignals>().InitializeDices?.Invoke();
+        AudioManager.Instance.PlayAudioEffect(AudioType.ButtonClick);
     }
     
     private void OnDiceIndexClick(int value)
     {
         _currentIndex = value;
         diceValueDropdown.value = (int)_diceData.diceValues[value];
+        AudioManager.Instance.PlayAudioEffect(AudioType.ButtonClick);
     }
     
     private void OnDiceValueClick(int value)
     {
         _diceData.SetDiceValue(_currentIndex, value);
+        AudioManager.Instance.PlayAudioEffect(AudioType.ButtonClick);
     }
 
     #endregion
