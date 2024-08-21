@@ -2944,7 +2944,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b663414dcd824496c8ce2d456e848079, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  effectData: {fileID: 11400000, guid: fb37d59b0ede64c53a9cc5376a535972, type: 2}
 --- !u!1 &657433574
 GameObject:
   m_ObjectHideFlags: 0
@@ -8127,6 +8126,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4941240ccb8074952a0cf92ba23febb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shakeDuration: 0.2
+  shakeMagnitude: 0.1
   followSpeed: 5
   XZ_Offset: {x: -4, y: -3.58}
 --- !u!1 &1751741564

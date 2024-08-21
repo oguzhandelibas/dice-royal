@@ -84,6 +84,7 @@ public class DiceManager : MonoBehaviour
 
         await Task.Delay(1500);
 
+        
         playerSignals.InitializeMovement?.Invoke();
     }
 

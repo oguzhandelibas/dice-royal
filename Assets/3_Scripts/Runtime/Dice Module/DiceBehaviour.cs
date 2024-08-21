@@ -15,6 +15,7 @@ public class DiceBehaviour : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
+        SO_Manager.Get<CameraSignals>().ShakeCamera?.Invoke();
         AudioManager.Instance.PlayAudioEffect(AudioType.DiceCollision);
         GameObject effect = EffectManager.Instance.GetEffect(EffectType.DiceCollision);
         effect.transform.position = transform.position;

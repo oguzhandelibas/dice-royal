@@ -21,6 +21,7 @@ public class PlayerManager : MonoBehaviour
         PlayerBehaviour player = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity, playerParent);
         player.Initialize(playerType, tileDatas);
         _playerSignals.PlayerInitialized?.Invoke(player.transform);
+        GameManager.Instance.isGameStarted = true;
     }
 
     private void MovePlayer()

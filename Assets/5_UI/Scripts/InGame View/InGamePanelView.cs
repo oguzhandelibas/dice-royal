@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,7 @@ public class InGamePanelView : View
     }
     private void OnGoButtonClick()
     {
+        if (!GameManager.Instance.isGameStarted) return;
         AudioManager.Instance.PlayAudioEffect(AudioType.ButtonClick);
         SO_Manager.Get<DiceSignals>().RollDices?.Invoke();
         goButton.interactable = false;
@@ -22,7 +24,7 @@ public class InGamePanelView : View
         goButton.interactable = true;
     }
     
-    private void DeactivateGoButton(int i)
+    private void GameReadyToPlay(List<TileData> tileDatas)
     {
         goButton.interactable = false;
     }

@@ -1,9 +1,11 @@
 using System;
+using ODProjects;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class GameManager : MonoBehaviour
+public class GameManager : AbstractSingleton<GameManager>
 {
-    public int testInt;
+    public bool isGameStarted = false;
     private GameSignals _gameSignals;
     private void Start()
     {
@@ -11,13 +13,5 @@ public class GameManager : MonoBehaviour
         
         UIManager.Instance.Show<LoadingPanelView>();
         _gameSignals.OnGameInitialize?.Invoke();
-    }
-
-    private void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            //SO_Manager.Get<PlayerSignals>().MoveTargetPosition?.Invoke(testInt);
-        }
     }
 }
