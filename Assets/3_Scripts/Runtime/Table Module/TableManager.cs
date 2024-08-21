@@ -172,26 +172,15 @@ public class TableManager : MonoBehaviour
 
     private void ProcessTiles_SO(TableCreationData tableCreationData, SpriteData spriteData)
     {
-        Element element =
-            _tableElements[tableCreationData.Row * tableCreationData.GridSize.x + tableCreationData.Column];
+        Element element = _tableElements
+            [tableCreationData.Row * tableCreationData.GridSize.x + tableCreationData.Column];
         if (!element.isActive) return;
 
-        Sprite elementSprite = spriteData.GetSprite(element.selectedElement);
-        bool isEmpty = element.selectedElement == SelectedElement.Null;
-        Vector3 position = new Vector3(tableCreationData.Row * tableCreationData.Spacing, -0.4f,
-            tableCreationData.Column * tableCreationData.Spacing);
-
-        TileBehaviour tileBehaviourTemp =
-            Instantiate(tileBehaviourPrefab, position, tableCreationData.Rotation, tableParent);
-        tileBehaviourTemp.InitializeTile(elementSprite, tableCreationData.TileIndex, element.elementCount, isEmpty);
-
-        _tileDatas.Add(new TileData
-        {
-            TileBehaviour = tileBehaviourTemp,
-            Position = position,
-            SelectedElement = element.selectedElement,
-            ElementCount = element.elementCount
-        });
+        SelectedElement selectedElement = element.selectedElement;
+        Sprite elementSprite = spriteData.GetSprite(selectedElement);
+        bool isEmpty = selectedElement == SelectedElement.Null;
+        
+        TileCreation(tableCreationData, selectedElement, element.elementCount, elementSprite, isEmpty);
     }
 
     private void ProcessTiles_Random(TableCreationData tableCreationData, SpriteData spriteData)
@@ -200,22 +189,10 @@ public class TableManager : MonoBehaviour
         Sprite elementSprite = spriteData.GetSprite(selectedElement);
         int elementCount = Random.Range(1, 26);
         bool isEmpty = selectedElement == SelectedElement.Null || Random.Range(0, 3) == 0;
-        Vector3 position = new Vector3(tableCreationData.Row * tableCreationData.Spacing, -0.4f,
-            tableCreationData.Column * tableCreationData.Spacing);
-
-        TileBehaviour tileBehaviourTemp =
-            Instantiate(tileBehaviourPrefab, position, tableCreationData.Rotation, tableParent);
-        tileBehaviourTemp.InitializeTile(elementSprite, tableCreationData.TileIndex, elementCount, isEmpty);
-
-        _tileDatas.Add(new TileData
-        {
-            TileBehaviour = tileBehaviourTemp,
-            Position = position,
-            SelectedElement = selectedElement,
-            ElementCount = elementCount
-        });
+        
+        TileCreation(tableCreationData, selectedElement, elementCount, elementSprite, isEmpty);
     }
-
+    
     private void ProcessTiles_JSON(TableCreationData tableCreationData, SpriteData spriteData)
     {
         int elementIndex = tableCreationData.Row * tableCreationData.GridSize.x + tableCreationData.Column;
@@ -227,23 +204,31 @@ public class TableManager : MonoBehaviour
         }
 
         JSONElement jsonElement = _jsonLevelData.Elements[elementIndex];
+        SelectedElement selectedElement = (SelectedElement)jsonElement.selectedElement;
+        Sprite elementSprite = spriteData.GetSprite(selectedElement);
+        bool isEmpty = selectedElement == (int)SelectedElement.Null;
 
-        Sprite elementSprite = spriteData.GetSprite((SelectedElement)jsonElement.selectedElement);
-        bool isEmpty = jsonElement.selectedElement == (int)SelectedElement.Null;
+
+        TileCreation(tableCreationData, selectedElement, jsonElement.elementCount, elementSprite, isEmpty);
+    }
+    
+
+    private void TileCreation(TableCreationData tableCreationData, SelectedElement selectedElement, int elementCount,
+        Sprite elementSprite, bool isEmpty)
+    {
 
         Vector3 position = new Vector3(tableCreationData.Row * tableCreationData.Spacing, -0.4f,
             tableCreationData.Column * tableCreationData.Spacing);
-
         TileBehaviour tileBehaviourTemp =
             Instantiate(tileBehaviourPrefab, position, tableCreationData.Rotation, tableParent);
-        tileBehaviourTemp.InitializeTile(elementSprite, tableCreationData.TileIndex, jsonElement.elementCount, isEmpty);
+        tileBehaviourTemp.InitializeTile(elementSprite, tableCreationData.TileIndex, elementCount, isEmpty);
 
         _tileDatas.Add(new TileData
         {
             TileBehaviour = tileBehaviourTemp,
             Position = position,
-            SelectedElement = (SelectedElement)jsonElement.selectedElement,
-            ElementCount = jsonElement.elementCount
+            SelectedElement = selectedElement,
+            ElementCount = elementCount
         });
     }
 

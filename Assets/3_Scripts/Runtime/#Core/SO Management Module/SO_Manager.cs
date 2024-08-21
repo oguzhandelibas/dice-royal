@@ -12,7 +12,8 @@ public enum SO_Type
     LevelDatas,
     SpriteData,
     DiceData,
-    PlayerData
+    PlayerData,
+    InventoryData
 }
 
 public static class SO_Manager
@@ -26,7 +27,8 @@ public static class SO_Manager
         { SO_Type.LevelDatas, "ScriptableObjects/Data/LevelDatas"},
         { SO_Type.SpriteData, "ScriptableObjects/Data/SpriteData"},
         { SO_Type.DiceData, "ScriptableObjects/Data/DiceData"},
-        { SO_Type.PlayerData, "ScriptableObjects/Data/PlayerData"}
+        { SO_Type.PlayerData, "ScriptableObjects/Data/PlayerData"},
+        { SO_Type.InventoryData, "ScriptableObjects/Data/InventoryData"}
     };
 
     private static readonly Dictionary<SO_Type, ScriptableObject> _cache = new Dictionary<SO_Type, ScriptableObject>();
@@ -83,6 +85,8 @@ public static class SO_Manager
             return SO_Type.DiceData;
         if (typeof(T) == typeof(PlayerData))
             return SO_Type.PlayerData;
+        if (typeof(T) == typeof(InventoryData))
+            return SO_Type.InventoryData;
         
         throw new ArgumentException($"Unsupported ScriptableObject type: {typeof(T)}");
     }

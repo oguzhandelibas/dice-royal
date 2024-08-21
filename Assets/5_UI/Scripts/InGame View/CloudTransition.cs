@@ -4,5 +4,8 @@ using UnityEngine;
 
 public class CloudTransition : MonoBehaviour
 {
-    public void Deactivate() => gameObject.SetActive(false);
+    public void Deactivate()
+    {
+        gameObject.SetActive(false);
+    } 
 }

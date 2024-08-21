@@ -9,11 +9,11 @@ public class DummySelectionPanel : MonoBehaviour
         int index = 0;
         foreach (var playerType in SO_Manager.Get<PlayerData>().playerTypes)
         {
-            int capturedIndex = index; // index değerini burada yakala
+            int capturedIndex = index;
             playerTypeButtons[index].transform.GetChild(0).GetComponent<Image>().sprite = playerType.Value.dummySprite;
             playerTypeButtons[capturedIndex].onClick.AddListener(() =>
             {
-                SetPlayerType(capturedIndex); // capturedIndex kullan
+                SetPlayerType(capturedIndex);
             });
             index++;
         }
