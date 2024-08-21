@@ -4,4 +4,5 @@ public enum EffectType
     GroundPulse,
     JumpEffect,
     CollectFlash,
+    Confetti,
 }

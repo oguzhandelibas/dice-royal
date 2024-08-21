@@ -1,7 +1,4 @@
-using System;
 using ODProjects;
-using UnityEngine;
-using UnityEngine.Serialization;
 
 public class GameManager : AbstractSingleton<GameManager>
 {

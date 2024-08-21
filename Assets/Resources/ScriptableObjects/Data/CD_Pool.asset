@@ -34,3 +34,8 @@ MonoBehaviour:
         ObjectType: {fileID: 137758, guid: a67ce15f50785584d97708026f874d99, type: 3}
         initalAmount: 2
         isDynamic: 1
+    - Key: 4
+      Value:
+        ObjectType: {fileID: 165102, guid: 4de72d65c2293424cbe6461a89fe2997, type: 3}
+        initalAmount: 2
+        isDynamic: 0

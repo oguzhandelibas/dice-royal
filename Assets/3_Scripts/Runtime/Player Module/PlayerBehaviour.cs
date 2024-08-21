@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using LevelEditor;
-using ODProjects.PoolModule.Signals;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class PlayerBehaviour : MonoBehaviour
@@ -17,6 +17,7 @@ public class PlayerBehaviour : MonoBehaviour
         GameObject player = SO_Manager.Get<PlayerData>().playerTypes[type].dummyPrefab;
         Instantiate(player, transform.position + Vector3.up*.1f, Quaternion.identity, transform);
         StartCoroutine(MoveSequentialPositions(1, false));
+        transform.rotation = quaternion.Euler(0,0,0);
     }
 
     private void MoveTargetPosition(int moveCount)
@@ -34,17 +35,10 @@ public class PlayerBehaviour : MonoBehaviour
         if (!collectElement) yield break;
         SO_Manager.Get<PlayerSignals>().MovementComplete?.Invoke(true);
         var tileData = _tileDatas[_currentIndex];
-        ;
-        InventorySignals inventorySignals = SO_Manager.Get<InventorySignals>();
+        
         if (tileData.SelectedElement != SelectedElement.Null)
         {
-            inventorySignals.AddInventoryElement?.Invoke(tileData.SelectedElement, tileData.ElementCount);
-            Debug.Log("Movement completed: " + tileData.SelectedElement + " " + tileData.ElementCount);
-            AudioManager.Instance.PlayAudioEffect(AudioType.InventoryCollect);
-            
-            GameObject effect = EffectManager.Instance.GetEffect(EffectType.CollectFlash);
-            effect.transform.position = transform.position + Vector3.up;
-            effect.transform.rotation = Quaternion.Euler(0, 0, 0);
+            CollectInventoryItem(tileData);
         }
         else
         {
@@ -52,6 +46,23 @@ public class PlayerBehaviour : MonoBehaviour
         }
     }
 
+    private void CollectInventoryItem(TileData tileData)
+    {
+        SO_Manager.Get<InventorySignals>().AddInventoryElement?.Invoke(tileData.SelectedElement, tileData.ElementCount);
+        AudioManager.Instance.PlayAudioEffect(AudioType.InventoryCollect);
+            
+        GameObject effect = EffectManager.Instance.GetEffect(EffectType.CollectFlash);
+        effect.transform.position = transform.position + Vector3.up;
+        effect.transform.rotation = Quaternion.Euler(0, 0, 0);
+            
+        GameObject confetti1 = EffectManager.Instance.GetEffect(EffectType.Confetti);
+        GameObject confetti2 = EffectManager.Instance.GetEffect(EffectType.Confetti);
+        confetti1.transform.position = transform.position + new Vector3(1,-0.5f, 0);
+        confetti2.transform.position = transform.position + new Vector3(-1,-0.5f, 0);
+        
+        
+    }
+    
     private int GetCurrentIndex()
     {
         _currentIndex++;
@@ -112,6 +123,23 @@ public class PlayerBehaviour : MonoBehaviour
         if (difference.magnitude < 0.1f) _playerDirection = PlayerDirection.Forward;
         if (Mathf.Abs(difference.x) > Mathf.Abs(difference.z)) _playerDirection = difference.x > 0 ? PlayerDirection.Right : PlayerDirection.Left;
         else _playerDirection = difference.z > 0 ? PlayerDirection.Forward : PlayerDirection.Backward;
+        Quaternion targetRotation = quaternion.Euler(0,0,0);
+        switch (_playerDirection)
+        {
+            case PlayerDirection.Left:
+                targetRotation = Quaternion.Euler(0, -90, 0);
+                break;
+            case PlayerDirection.Right:
+                targetRotation = Quaternion.Euler(0, 90, 0);
+                break;
+            case PlayerDirection.Forward:
+                targetRotation = Quaternion.Euler(0, 0, 0);
+                break;
+            case PlayerDirection.Backward:
+                targetRotation = Quaternion.Euler(0, 180, 0);
+                break;
+        }
+        transform.rotation = targetRotation;
     }
 
     private Transform GetPlayerTransform() => transform;
