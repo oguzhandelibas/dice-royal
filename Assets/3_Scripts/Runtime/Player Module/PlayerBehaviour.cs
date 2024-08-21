@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class PlayerBehaviour : MonoBehaviour
 {
-    [SerializeField] private PlayerData playerData;
     private List<TileData> _tileDatas;
     private int _currentIndex;
     private PlayerDirection _playerDirection;
@@ -14,8 +13,8 @@ public class PlayerBehaviour : MonoBehaviour
     {
         _currentIndex = -1;
         _tileDatas = tileDatas;
-        GameObject player = playerData.playerPrefabs[type];
-        Instantiate(player, transform.position, Quaternion.identity, transform);
+        GameObject player = SO_Manager.Get<PlayerData>().playerTypes[type].dummyPrefab;
+        Instantiate(player, transform.position + Vector3.up*.1f, Quaternion.identity, transform);
         StartCoroutine(MoveSequentialPositions(1, false));
     }
 
@@ -72,7 +71,7 @@ public class PlayerBehaviour : MonoBehaviour
         
         Vector3 originalScale = transform.localScale;
         Vector3 jumpScale = originalScale * 1.2f;
-        Vector3 targetPosition = tileData.Position + new Vector3(0, 0.77f, 0);
+        Vector3 targetPosition = tileData.Position + new Vector3(0, 0.4f, 0);
         Vector3 startPosition = transform.position;
 
         Vector3 difference = targetPosition - startPosition;

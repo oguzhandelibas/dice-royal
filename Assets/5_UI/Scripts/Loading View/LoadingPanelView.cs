@@ -34,7 +34,6 @@ public class LoadingPanelView: View
         }
         
         UIManager.Instance.Show<InGamePanelView>();
-        SO_Manager.Get<GameSignals>().OnGameStart?.Invoke();
     }
 
 

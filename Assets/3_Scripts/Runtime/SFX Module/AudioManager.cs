@@ -29,6 +29,7 @@ public class AudioManager : AbstractSingleton<AudioManager>
     public void _SetMusicActiveness()
     {
         _isMusicActive = !_isMusicActive;
+        if(musicButtonImage == null) return;
         musicButtonImage.color = _isMusicActive ? new Color(0.2941177f, 0.3764706f, 0.4745098f) : new Color(0.70f, 0.70f, 0.70f);
         musicSource.volume = _isMusicActive ? 0.05f : 0.0f;
     }
@@ -36,6 +37,7 @@ public class AudioManager : AbstractSingleton<AudioManager>
     public void _SetSoundActiveness()
     {
         _isSoundActive = !_isSoundActive;
+        if(soundButtonImage == null) return;
         soundButtonImage.color = _isSoundActive ? new Color(0.2941177f, 0.3764706f, 0.4745098f) : new Color(0.70f, 0.70f, 0.70f);
         effectSource.volume = _isSoundActive ? 0.5f : 0.0f;
     }
@@ -47,7 +49,7 @@ public class AudioManager : AbstractSingleton<AudioManager>
             effectSource.Stop();
             effectSource.clip = null;
         }
-        Debug.Log($"AudioType: {audioType}");
+        
         effectSource.clip = audioData.audioEffects[audioType];
         effectSource.Play();
     }

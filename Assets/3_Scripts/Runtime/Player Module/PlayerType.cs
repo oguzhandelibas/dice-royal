@@ -3,5 +3,5 @@ public enum PlayerType
     Car,
     Ship,
     Plane,
-    Tank
+    Train
 }

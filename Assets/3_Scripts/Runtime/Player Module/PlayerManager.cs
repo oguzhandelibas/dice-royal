@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ODProjects;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
@@ -9,14 +10,15 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private Transform playerParent;
     private bool _onMovement = false;
     private PlayerSignals _playerSignals;
-    public void SetPlayerType(PlayerType type)
+    
+    private void SetPlayerType(PlayerType type)
     {
         playerType = type;
     }
     
     private void InitializePlayer(List<TileData> tileDatas)
     {
-        PlayerBehaviour player = Instantiate(playerPrefab, playerParent);
+        PlayerBehaviour player = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity, playerParent);
         player.Initialize(playerType, tileDatas);
         _playerSignals.PlayerInitialized?.Invoke(player.transform);
     }
@@ -40,6 +42,7 @@ public class PlayerManager : MonoBehaviour
     private void OnEnable()
     {
         _playerSignals = SO_Manager.Get<PlayerSignals>();
+        _playerSignals.SetPlayerType += SetPlayerType;
         _playerSignals.InitializeMovement += MovePlayer;
         _playerSignals.MovementComplete += MovementCompleted;
         _playerSignals.OnGameReadyToPlay += InitializePlayer;
@@ -47,6 +50,7 @@ public class PlayerManager : MonoBehaviour
 
     private void OnDisable()
     {
+        _playerSignals.SetPlayerType -= SetPlayerType;
         _playerSignals.InitializeMovement -= MovePlayer;
         _playerSignals.MovementComplete -= MovementCompleted;
         _playerSignals.OnGameReadyToPlay -= InitializePlayer;

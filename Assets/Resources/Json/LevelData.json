@@ -1,0 +1,57 @@
+{
+  "levelName": "Line Level",
+  "gridSize": {
+    "x": 1,
+    "y": 11
+  },
+  "Elements": [
+    {
+      "selectedElement": 2,
+      "elementCount": 5
+    },
+    {
+      "selectedElement": 2,
+      "elementCount": 5
+    },
+    {
+      "selectedElement": 0,
+      "elementCount": 0
+    },
+    {
+      "selectedElement": 0,
+      "elementCount": 0
+    },
+    {
+      "selectedElement": 0,
+      "elementCount": 0
+    },
+    {
+      "selectedElement": 0,
+      "elementCount": 0
+    },
+    {
+      "selectedElement": 0,
+      "elementCount": 0
+    },
+    {
+      "selectedElement": 0,
+      "elementCount": 0
+    },
+    {
+      "selectedElement": 0,
+      "elementCount": 0
+    },
+    {
+      "selectedElement": 0,
+      "elementCount": 0
+    },
+    {
+      "selectedElement": 0,
+      "elementCount": 0
+    },
+    {
+      "selectedElement": 0,
+      "elementCount": 0
+    }
+  ]
+}

@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using LevelEditor;
-using ODProjects;
 using UnityEngine;
 using Random = UnityEngine.Random;
+
+#region Table & Tile Data
 
 public record TableCreationData
 {
@@ -13,6 +14,17 @@ public record TableCreationData
     public Vector2Int GridSize;
     public Quaternion Rotation;
     public float Spacing;
+
+    public TableCreationData(int row, int column, int tileIndex, Vector2Int gridSize, Quaternion rotation,
+        float spacing)
+    {
+        Row = row;
+        Column = column;
+        TileIndex = tileIndex;
+        GridSize = gridSize;
+        Rotation = rotation;
+        Spacing = spacing;
+    }
 }
 
 public record TileData
@@ -23,14 +35,45 @@ public record TileData
     public int ElementCount;
 }
 
+#endregion
+
+#region JSON
+
+[Serializable]
+public class JSONGridSize
+{
+    public int x;
+    public int y;
+}
+
+[Serializable]
+public class JSONElement
+{
+    public int selectedElement;
+    public int elementCount;
+}
+
+[Serializable]
+public class JSONLevelData
+{
+    public string levelName;
+    public JSONGridSize gridSize;
+    public List<JSONElement> Elements;
+}
+
+#endregion
+
 public class TableManager : MonoBehaviour
 {
+    #region FIELDS
+
     [Header("Level")] [SerializeField] private LevelType levelType;
     [SerializeField] private LevelDataType levelDataType;
 
     private LevelDatas _levelDatas;
     private LevelData _levelData;
     private Element[] _tableElements;
+    private JSONLevelData _jsonLevelData;
 
     private List<TileData> _tileDatas = new List<TileData>();
 
@@ -39,139 +82,75 @@ public class TableManager : MonoBehaviour
 
     [SerializeField] private TileBehaviour tileBehaviourPrefab;
 
+    #endregion
+
     private void InitializeTable()
     {
-        _levelDatas = SO_Manager.Get<LevelDatas>();
-        _levelData = _levelDatas.GetLevelData(levelType);
-        Vector2Int gridSize = _levelData.gridSize;
-        _tableElements = _levelData.Elements;
+        Vector2Int gridSize;
+        if (levelDataType == LevelDataType.Random || levelDataType == LevelDataType.ScriptableObject)
+        {
+            _levelDatas = SO_Manager.Get<LevelDatas>();
+            _levelData = _levelDatas.GetLevelData(levelType);
+            gridSize = _levelData.gridSize;
+            _tableElements = _levelData.Elements;
+        }
+        else
+        {
+            gridSize = LoadJson();
+        }
+
         CreateTables(gridSize, 1.05f);
     }
 
-    /* Optimization Test on CreateTables Method
-    private void CreateTables(Vector2Int gridSize, float spacing)
+    private Vector2Int LoadJson()
     {
-        int maxRow = gridSize.x;
-        int maxColumn = gridSize.y;
-        int index = 1;
+        TextAsset jsonText = Resources.Load<TextAsset>("Json/LevelData");
+        _jsonLevelData = JsonUtility.FromJson<JSONLevelData>(jsonText.text);
 
-        // Döngü parametrelerini belirleyen dizi (başlangıç, bitiş, adım, dönüş açısı)
-        (int startRow, int startColumn, int rowIncrement, int colIncrement, Quaternion rotation)[] loops =
-        {
-            (0, 0, 0, 1, Quaternion.Euler(0, 90, 0)),   // Sol kenar
-            (1, maxColumn - 1, 1, 0, Quaternion.Euler(0, 180, 0)),  // Üst kenar
-            (maxRow - 1, maxColumn - 2, 0, -1, Quaternion.Euler(0, 270, 0)),  // Sağ kenar
-            (maxRow - 2, 0, -1, 0, Quaternion.Euler(0, 0, 0))   // Alt kenar
-        };
-
-        foreach (var (startRow, startColumn, rowIncrement, colIncrement, rotation) in loops)
-        {
-            int row = startRow;
-            int column = startColumn;
-
-            while (row >= 0 && row < maxRow && column >= 0 && column < maxColumn)
-            {
-                var tableCreationData = new TableCreationData
-                {
-                    row = row,
-                    column = column,
-                    tileIndex = index,
-                    gridSize = gridSize,
-                    rotation = rotation,
-                    spacing = spacing
-                };
-
-                ProcessTile(tableCreationData);
-                index++;
-                row += rowIncrement;
-                column += colIncrement;
-            }
-        }
+        return new Vector2Int(1, _jsonLevelData.Elements.Count);
     }
-    */
 
-    // ReSharper disable Unity.PerformanceAnalysis
     private void CreateTables(Vector2Int gridSize, float spacing)
     {
         int maxRow = gridSize.x;
         int maxColumn = gridSize.y;
         int index = 1;
-        TableCreationData tableCreationData;
+
         for (int i = 0; i < maxColumn; i++) // Sol kenar (aşağıdan yukarıya)
         {
-            int row = 0;
-            int column = i;
-            tableCreationData = new TableCreationData
-            {
-                Row = row,
-                Column = column,
-                TileIndex = index,
-                GridSize = gridSize,
-                Rotation = Quaternion.Euler(0, 90, 0),
-                Spacing = spacing
-            };
-            ProcessTile(tableCreationData);
+            ProcessTile(new TableCreationData(0, i, index, gridSize, Quaternion.Euler(0, 90, 0), spacing));
             index++;
         }
-        
+
         PlayerSignals playerSignals = SO_Manager.Get<PlayerSignals>();
         if (levelType == LevelType.Line)
         {
             playerSignals.OnGameReadyToPlay?.Invoke(_tileDatas);
             return;
         }
+
         for (int i = 1; i < maxRow; i++) // Üst kenar (soldan sağa)
         {
-            int row = i;
-            int column = maxColumn - 1;
-            tableCreationData = new TableCreationData
-            {
-                Row = row,
-                Column = column,
-                TileIndex = index,
-                GridSize = gridSize,
-                Rotation = Quaternion.Euler(0, 180, 0),
-                Spacing = spacing
-            };
-            ProcessTile(tableCreationData);
+            ProcessTile(new TableCreationData(i, maxColumn - 1, index, gridSize, Quaternion.Euler(0, 180, 0), spacing));
             index++;
         }
 
         for (int i = maxColumn - 2; i >= 0; i--) // Sağ kenar (yukarıdan aşağıya)
         {
-            int row = maxRow - 1;
-            int column = i;
-            tableCreationData = new TableCreationData
-            {
-                Row = row,
-                Column = column,
-                TileIndex = index,
-                GridSize = gridSize,
-                Rotation = Quaternion.Euler(0, 270, 0),
-                Spacing = spacing
-            };
-            ProcessTile(tableCreationData);
+            ProcessTile(new TableCreationData(maxRow - 1, i, index, gridSize, Quaternion.Euler(0, 270, 0), spacing));
             index++;
         }
 
         for (int i = maxRow - 2; i > 0; i--) // Alt kenar (sağdan sola)
         {
-            int row = i;
-            int column = 0;
-            tableCreationData = new TableCreationData
-            {
-                Row = row,
-                Column = column,
-                TileIndex = index,
-                GridSize = gridSize,
-                Rotation = Quaternion.Euler(0, 0, 0),
-                Spacing = spacing
-            };
-            ProcessTile(tableCreationData);
+            ProcessTile(new TableCreationData(i, 0, index, gridSize, Quaternion.Euler(0, 0, 0), spacing));
             index++;
         }
+
         playerSignals.OnGameReadyToPlay?.Invoke(_tileDatas);
     }
+
+    #region Process Partials
 
     private void ProcessTile(TableCreationData tableCreationData)
     {
@@ -180,7 +159,7 @@ public class TableManager : MonoBehaviour
         switch (levelDataType)
         {
             case LevelDataType.JSON:
-                ProcessTiles_SO(tableCreationData, spriteData);
+                ProcessTiles_JSON(tableCreationData, spriteData);
                 break;
             case LevelDataType.ScriptableObject:
                 ProcessTiles_SO(tableCreationData, spriteData);
@@ -191,12 +170,10 @@ public class TableManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Creates tile according to Scriptable Object data.
-    /// </summary>
     private void ProcessTiles_SO(TableCreationData tableCreationData, SpriteData spriteData)
     {
-        Element element = _tableElements[tableCreationData.Row * tableCreationData.GridSize.x + tableCreationData.Column];
+        Element element =
+            _tableElements[tableCreationData.Row * tableCreationData.GridSize.x + tableCreationData.Column];
         if (!element.isActive) return;
 
         Sprite elementSprite = spriteData.GetSprite(element.selectedElement);
@@ -204,9 +181,10 @@ public class TableManager : MonoBehaviour
         Vector3 position = new Vector3(tableCreationData.Row * tableCreationData.Spacing, -0.4f,
             tableCreationData.Column * tableCreationData.Spacing);
 
-        TileBehaviour tileBehaviourTemp = Instantiate(tileBehaviourPrefab, position, tableCreationData.Rotation, tableParent);
+        TileBehaviour tileBehaviourTemp =
+            Instantiate(tileBehaviourPrefab, position, tableCreationData.Rotation, tableParent);
         tileBehaviourTemp.InitializeTile(elementSprite, tableCreationData.TileIndex, element.elementCount, isEmpty);
-        
+
         _tileDatas.Add(new TileData
         {
             TileBehaviour = tileBehaviourTemp,
@@ -216,10 +194,6 @@ public class TableManager : MonoBehaviour
         });
     }
 
-
-    /// <summary>
-    /// Creates tile according to Random.
-    /// </summary>
     private void ProcessTiles_Random(TableCreationData tableCreationData, SpriteData spriteData)
     {
         SelectedElement selectedElement = (SelectedElement)Random.Range(0, 4);
@@ -228,10 +202,11 @@ public class TableManager : MonoBehaviour
         bool isEmpty = selectedElement == SelectedElement.Null || Random.Range(0, 3) == 0;
         Vector3 position = new Vector3(tableCreationData.Row * tableCreationData.Spacing, -0.4f,
             tableCreationData.Column * tableCreationData.Spacing);
-        
-        TileBehaviour tileBehaviourTemp = Instantiate(tileBehaviourPrefab, position, tableCreationData.Rotation, tableParent);
+
+        TileBehaviour tileBehaviourTemp =
+            Instantiate(tileBehaviourPrefab, position, tableCreationData.Rotation, tableParent);
         tileBehaviourTemp.InitializeTile(elementSprite, tableCreationData.TileIndex, elementCount, isEmpty);
-        
+
         _tileDatas.Add(new TileData
         {
             TileBehaviour = tileBehaviourTemp,
@@ -241,16 +216,40 @@ public class TableManager : MonoBehaviour
         });
     }
 
-
-    /// <summary>
-    /// Creates tile according to JSON Data.
-    /// </summary>
     private void ProcessTiles_JSON(TableCreationData tableCreationData, SpriteData spriteData)
     {
-        throw new NotImplementedException();
+        int elementIndex = tableCreationData.Row * tableCreationData.GridSize.x + tableCreationData.Column;
+
+        if (elementIndex >= _jsonLevelData.Elements.Count)
+        {
+            Debug.LogError("JSON Elements out of the array");
+            return;
+        }
+
+        JSONElement jsonElement = _jsonLevelData.Elements[elementIndex];
+
+        Sprite elementSprite = spriteData.GetSprite((SelectedElement)jsonElement.selectedElement);
+        bool isEmpty = jsonElement.selectedElement == (int)SelectedElement.Null;
+
+        Vector3 position = new Vector3(tableCreationData.Row * tableCreationData.Spacing, -0.4f,
+            tableCreationData.Column * tableCreationData.Spacing);
+
+        TileBehaviour tileBehaviourTemp =
+            Instantiate(tileBehaviourPrefab, position, tableCreationData.Rotation, tableParent);
+        tileBehaviourTemp.InitializeTile(elementSprite, tableCreationData.TileIndex, jsonElement.elementCount, isEmpty);
+
+        _tileDatas.Add(new TileData
+        {
+            TileBehaviour = tileBehaviourTemp,
+            Position = position,
+            SelectedElement = (SelectedElement)jsonElement.selectedElement,
+            ElementCount = jsonElement.elementCount
+        });
     }
 
-    #region EVETN SUBSCRIPTION
+    #endregion
+
+    #region EVENT SUBSCRIPTION
 
     private void OnEnable()
     {

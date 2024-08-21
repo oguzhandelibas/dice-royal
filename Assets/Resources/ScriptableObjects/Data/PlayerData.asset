@@ -12,13 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5b0426642014f73b41d19a819746092, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
-  playerPrefabs:
+  playerTypes:
     _serializedList:
     - Key: 0
-      Value: {fileID: 42251172395882670, guid: e3b997f5ad5c44fcd94f17def537d5fd, type: 3}
+      Value:
+        dummyPrefab: {fileID: 6669371605291636466, guid: 832a50e4ab0bb4e8ebf00c8bc63d2eee, type: 3}
+        dummySprite: {fileID: 21300000, guid: 0500d994f3d7a4d0a8e9fb8f440d3405, type: 3}
     - Key: 1
-      Value: {fileID: 847847811324991755, guid: 82b23f0dd53b14e0cbbc1ee19c1b147c, type: 3}
+      Value:
+        dummyPrefab: {fileID: 7718749173657618065, guid: 7a8b1fb10b524410c990ae19585498d9, type: 3}
+        dummySprite: {fileID: 21300000, guid: f1b7a54994a1c4a2698bf444cc27f921, type: 3}
     - Key: 2
-      Value: {fileID: 847847811324991755, guid: 82b23f0dd53b14e0cbbc1ee19c1b147c, type: 3}
+      Value:
+        dummyPrefab: {fileID: 8193426327937452911, guid: ae9b790ce676542c19fbabc50f669e7f, type: 3}
+        dummySprite: {fileID: 21300000, guid: b970f5cbdf1994d669d565e4060a774e, type: 3}
     - Key: 3
-      Value: {fileID: 8291020720251328665, guid: 16f365e791ee84fc693b9b2cd8a6957e, type: 3}
+      Value:
+        dummyPrefab: {fileID: 8627558773490943081, guid: af124b3ddb638493eb034e22c12e5723, type: 3}
+        dummySprite: {fileID: 21300000, guid: 2e243f3b2bfad40d089d22d8087c2da5, type: 3}

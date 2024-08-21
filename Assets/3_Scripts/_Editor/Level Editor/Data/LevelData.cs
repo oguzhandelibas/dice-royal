@@ -73,10 +73,8 @@ namespace LevelEditor
 
         private void OnValidate()
         {
-            
             if (_gridSizeHistory != gridSize)
             {
-                gridSize.y = 11;
                 Elements = new Element[gridSize.x * gridSize.y];
                 _gridSizeHistory = gridSize;
             }

@@ -8,9 +8,9 @@ public class InGamePanelView : View
     private void Start()
     {
         AudioManager.Instance.PlayAudioEffect(AudioType.CloudEffect);
-        goButton.onClick.AddListener(_GoButton);
+        goButton.onClick.AddListener(OnGoButtonClick);
     }
-    private void _GoButton()
+    private void OnGoButtonClick()
     {
         AudioManager.Instance.PlayAudioEffect(AudioType.ButtonClick);
         SO_Manager.Get<DiceSignals>().RollDices?.Invoke();

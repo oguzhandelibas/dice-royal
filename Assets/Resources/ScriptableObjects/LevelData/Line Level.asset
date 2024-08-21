@@ -14,15 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridSize: {x: 1, y: 11}
   Elements:
-  - selectedElement: 1
-    elementCount: 2
-    isActive: 1
-    hasElement: 1
-    GuiContent:
-      m_Text: 2
-      m_Image: {fileID: 2800000, guid: e3d420cf0650e4a54be1bd421bb66ed7, type: 3}
-      m_Tooltip: 
-    Color: {r: 1, g: 1, b: 1, a: 1}
   - selectedElement: 0
     elementCount: 0
     isActive: 1
@@ -30,33 +21,6 @@ MonoBehaviour:
     GuiContent:
       m_Text: N/A
       m_Image: {fileID: 0}
-      m_Tooltip: 
-    Color: {r: 1, g: 1, b: 1, a: 1}
-  - selectedElement: 0
-    elementCount: 0
-    isActive: 1
-    hasElement: 0
-    GuiContent:
-      m_Text: N/A
-      m_Image: {fileID: 0}
-      m_Tooltip: 
-    Color: {r: 1, g: 1, b: 1, a: 1}
-  - selectedElement: 0
-    elementCount: 0
-    isActive: 1
-    hasElement: 0
-    GuiContent:
-      m_Text: N/A
-      m_Image: {fileID: 0}
-      m_Tooltip: 
-    Color: {r: 1, g: 1, b: 1, a: 1}
-  - selectedElement: 1
-    elementCount: 2
-    isActive: 1
-    hasElement: 1
-    GuiContent:
-      m_Text: 2
-      m_Image: {fileID: 2800000, guid: e3d420cf0650e4a54be1bd421bb66ed7, type: 3}
       m_Tooltip: 
     Color: {r: 1, g: 1, b: 1, a: 1}
   - selectedElement: 0
@@ -113,4 +77,40 @@ MonoBehaviour:
       m_Image: {fileID: 0}
       m_Tooltip: 
     Color: {r: 1, g: 1, b: 1, a: 1}
-  HasPath: 1
+  - selectedElement: 0
+    elementCount: 0
+    isActive: 1
+    hasElement: 0
+    GuiContent:
+      m_Text: N/A
+      m_Image: {fileID: 0}
+      m_Tooltip: 
+    Color: {r: 1, g: 1, b: 1, a: 1}
+  - selectedElement: 0
+    elementCount: 0
+    isActive: 1
+    hasElement: 0
+    GuiContent:
+      m_Text: N/A
+      m_Image: {fileID: 0}
+      m_Tooltip: 
+    Color: {r: 1, g: 1, b: 1, a: 1}
+  - selectedElement: 0
+    elementCount: 0
+    isActive: 1
+    hasElement: 0
+    GuiContent:
+      m_Text: N/A
+      m_Image: {fileID: 0}
+      m_Tooltip: 
+    Color: {r: 1, g: 1, b: 1, a: 1}
+  - selectedElement: 0
+    elementCount: 0
+    isActive: 1
+    hasElement: 0
+    GuiContent:
+      m_Text: N/A
+      m_Image: {fileID: 0}
+      m_Tooltip: 
+    Color: {r: 1, g: 1, b: 1, a: 1}
+  HasPath: 0
