@@ -16,6 +16,21 @@ MonoBehaviour:
     _serializedList:
     - Key: 0
       Value:
-        ObjectType: {fileID: 6241060246740244005, guid: fb57ff752c4634070b5835f6753c1190, type: 3}
-        initalAmount: 5
-        isDynamic: 0
+        ObjectType: {fileID: 150944, guid: 3b9161edba9968c48bd058067ad18c84, type: 3}
+        initalAmount: 10
+        isDynamic: 1
+    - Key: 1
+      Value:
+        ObjectType: {fileID: 195466, guid: 56c3274d2f9ec214ab584a80b5ce2d6d, type: 3}
+        initalAmount: 2
+        isDynamic: 1
+    - Key: 2
+      Value:
+        ObjectType: {fileID: 195466, guid: 56c3274d2f9ec214ab584a80b5ce2d6d, type: 3}
+        initalAmount: 2
+        isDynamic: 1
+    - Key: 3
+      Value:
+        ObjectType: {fileID: 137758, guid: a67ce15f50785584d97708026f874d99, type: 3}
+        initalAmount: 2
+        isDynamic: 1

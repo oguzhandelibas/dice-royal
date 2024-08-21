@@ -5,6 +5,6 @@ namespace ODProjects.PoolModule.Interfaces
 {
     public interface IReleasePoolObject
     {
-        void OnReleaseObjectFromPool(GameObject obj, PoolType poolType);
+        void OnReleaseObjectFromPool(GameObject obj, EffectType poolType);
     }
 }

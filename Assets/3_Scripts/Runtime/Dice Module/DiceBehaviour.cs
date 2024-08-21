@@ -1,4 +1,5 @@
 using System.Collections;
+using ODProjects.PoolModule.Signals;
 using UnityEngine;
 
 public class DiceBehaviour : MonoBehaviour
@@ -16,7 +17,8 @@ public class DiceBehaviour : MonoBehaviour
     {
         AudioManager.Instance.PlayAudioEffect(AudioType.DiceCollision);
         GameObject effect = EffectManager.Instance.GetEffect(EffectType.DiceCollision);
-        Instantiate(effect, transform.position, Quaternion.identity);
+        effect.transform.position = transform.position;
+        
         StartCoroutine(RollRoutine(_desiredFinalRotation));
     }
 

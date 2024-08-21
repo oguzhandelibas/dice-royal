@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using LevelEditor;
+using ODProjects.PoolModule.Signals;
 using UnityEngine;
 
 public class PlayerBehaviour : MonoBehaviour
@@ -40,8 +41,10 @@ public class PlayerBehaviour : MonoBehaviour
             inventorySignals.AddInventoryElement?.Invoke(tileData.SelectedElement, tileData.ElementCount);
             Debug.Log("Movement completed: " + tileData.SelectedElement + " " + tileData.ElementCount);
             AudioManager.Instance.PlayAudioEffect(AudioType.InventoryCollect);
+            
             GameObject effect = EffectManager.Instance.GetEffect(EffectType.CollectFlash);
-            Instantiate(effect, transform.position+(Vector3.up), Quaternion.Euler(0,0,0));
+            effect.transform.position = transform.position + Vector3.up;
+            effect.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
         else
         {
@@ -77,8 +80,11 @@ public class PlayerBehaviour : MonoBehaviour
         Vector3 difference = targetPosition - startPosition;
         CalculatePlayerDirection(difference);
         AudioManager.Instance.PlayAudioEffect(AudioType.DummyJump);
+        
         GameObject effect = EffectManager.Instance.GetEffect(EffectType.JumpEffect);
-        Instantiate(effect, transform.position+(Vector3.up*.15f), Quaternion.Euler(90,0,0));
+        effect.transform.position = transform.position+(Vector3.up*.15f);
+        effect.transform.rotation = Quaternion.Euler(90,0,0);
+        
         while (elapsedTime < duration)
         {
             float progress = elapsedTime / duration;

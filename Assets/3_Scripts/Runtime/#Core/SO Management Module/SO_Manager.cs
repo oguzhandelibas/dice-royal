@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using LevelEditor;
+using ODProjects.PoolModule.Signals;
 using UnityEngine;
 
 public enum SO_Type
 {
     GameSignals,
+    PoolSignals,
     InventorySignals,
     PlayerSignals,
     DiceSignals,
@@ -21,6 +23,7 @@ public static class SO_Manager
     private static readonly Dictionary<SO_Type, string> Paths = new Dictionary<SO_Type, string>
     {
         { SO_Type.GameSignals, "ScriptableObjects/Signal/GameSignals"},
+        { SO_Type.PoolSignals, "ScriptableObjects/Signal/CD_PoolSignals"},
         { SO_Type.InventorySignals, "ScriptableObjects/Signal/InventorySignals"},
         { SO_Type.PlayerSignals, "ScriptableObjects/Signal/PlayerSignals"},
         { SO_Type.DiceSignals, "ScriptableObjects/Signal/DiceSignals"},
@@ -71,6 +74,8 @@ public static class SO_Manager
     {
         if (typeof(T) == typeof(GameSignals))
             return SO_Type.GameSignals;
+        if (typeof(T) == typeof(PoolSignals))
+            return SO_Type.PoolSignals;
         if (typeof(T) == typeof(InventorySignals))
             return SO_Type.InventorySignals;
         if (typeof(T) == typeof(PlayerSignals))

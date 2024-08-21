@@ -5,6 +5,6 @@ namespace ODProjects.PoolModule.Interfaces
 {
     public interface IGetPoolObject
     {
-        GameObject OnGetObjectFromPool(PoolType poolType);
+        GameObject OnGetObjectFromPool(EffectType poolType);
     }
 }

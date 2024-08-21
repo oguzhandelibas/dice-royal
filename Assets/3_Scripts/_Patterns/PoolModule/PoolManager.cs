@@ -19,7 +19,7 @@ namespace ODProjects.PoolModule
         #endregion
         
         #region Private Fields
-        private PoolType _listCountCache;
+        private EffectType _listCountCache;
         private ObjectPoolExtention _extention;
         #endregion
 
@@ -39,7 +39,7 @@ namespace ODProjects.PoolModule
         
         private void InitializePools()
         {
-            foreach (PoolType value in Enum.GetValues(typeof(PoolType)))
+            foreach (EffectType value in Enum.GetValues(typeof(EffectType)))
             {
                 if(!data.HasThisType(value)) return;
                 
@@ -48,7 +48,7 @@ namespace ODProjects.PoolModule
             }
         }
 
-        private void InitPool(PoolType poolType, int initalAmount, bool isDynamic)
+        private void InitPool(EffectType poolType, int initalAmount, bool isDynamic)
         {
             _extention.AddObjectPool<GameObject>(FactoryMethod, TurnOnObject, TurnOffObject, poolType, initalAmount, isDynamic);
         }
@@ -58,12 +58,13 @@ namespace ODProjects.PoolModule
         
         #region Get & Release Functions
 
-        public GameObject OnGetObjectFromPool(PoolType poolType)
+        public GameObject OnGetObjectFromPool(EffectType poolType)
         {
             _listCountCache = poolType;
-            return _extention.GetObject<GameObject>(poolType);
+            GameObject go = _extention.GetObject<GameObject>(poolType);
+            return go;
         }
-        public void OnReleaseObjectFromPool(GameObject obj, PoolType poolType)
+        public void OnReleaseObjectFromPool(GameObject obj, EffectType poolType)
         {
             _listCountCache = poolType;
             ResetObject(obj);
