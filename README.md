@@ -13,7 +13,7 @@ Harita oluşturma sistemi için 3 farklı alternatif ürettim. Case çalışmam�
 Ayrıca bana verilen dokümanda belirtilen çizgi şeklindeki harita talebine ek olarak kare, dikdörtgen ya da zikzak şekillerinde sahne üretimi de mümkündür.
 
 <p align="center">
-<img width="507" alt="Screenshot 2024-08-22 at 08 31 54" src="https://github.com/user-attachments/assets/90ea19af-b38f-4c85-9f19-2a23ac0f9307">
+<img width="507" alt="Table Manager" src="https://github.com/user-attachments/assets/90ea19af-b38f-4c85-9f19-2a23ac0f9307">
 </p>
 
 ## Level Editor
@@ -38,10 +38,14 @@ Sahnemizdeki zar sistemi için fizik tabanlı bir simülasyon gerçekleştirdim.
 <p align="center">
 <img width="767" alt="Screenshot 2024-08-22 at 08 36 34" src="https://github.com/user-attachments/assets/f0a5e85b-6c16-4ddc-9b80-6c9a23252236">
 </p>
+
 # Proje Düzeni
 ---
 Projenin genel yapısını sürdürülebilir ve olabildiğince karmaşıklıktan uzak olacak şekilde ayarladım. Klasör hiyerarşisini ve kod yapılarını buna göre düzenledim.
+
+<p align="center">
 <img width="293" alt="Screenshot 2024-08-22 at 08 38 31" src="https://github.com/user-attachments/assets/ab100159-740f-4f73-967b-281c78bd46d6">
+</p>
 
 # Teşekkür
 Vaktinizi ayırıp, titizlikle hazırladığım bu çalışmayı inceleyeceğiniz için şimdiden teşekkür ederim. Sizlerle tanışmak için sabırsızlanıyorum. 
