@@ -6,9 +6,11 @@ Merhaba,
 # Oynanış
 ---
 
-<p align="center">
+<table>
+  <tr>
 https://github.com/user-attachments/assets/b937715e-b679-4b5f-9d29-e8f6c6167cd1
-</p>
+  </tr>
+</table>
 
 # Harita Oluşumu
 ---
