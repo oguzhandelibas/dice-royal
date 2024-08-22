@@ -27,6 +27,12 @@ JSON ile sahne oluşturmaya geçmeden önce bu proje için hazırladığım Leve
   <img width="556" alt="Square Level" src="https://github.com/user-attachments/assets/cb1f221b-57d7-47c7-87fe-5eaf1fcd88a8">
 </p>
 
+<table>
+  <tr>
+    <td><img width="556" alt="Line Level" src="https://github.com/user-attachments/assets/7c80f9c4-6030-4e32-86be-d2ea5e0dedd1"></td>
+    <td><img width="556" alt="Square Level" src="https://github.com/user-attachments/assets/cb1f221b-57d7-47c7-87fe-5eaf1fcd88a8"></td>
+  </tr>
+</table>
 
 - **JSON**
 Hazırlanacak olan JSON dosyası ile sahnede istenilen hücreleri oluşturulabilir.
