@@ -17,7 +17,7 @@ Ayrıca bana verilen dokümanda belirtilen çizgi şeklindeki harita talebine ek
 <img width="507" alt="Table Manager" src="https://github.com/user-attachments/assets/90ea19af-b38f-4c85-9f19-2a23ac0f9307">
 </p>
 
-- **Level Editor**
+## Level Editor
 JSON ile sahne oluşturmaya geçmeden önce bu proje için hazırladığım Level Editörümü size tanıtmak istiyorum. Görselde de görüldüğü üzere "OD Projects > Level Editor" yolu takip edilerek editör penceresinden istenilen harita tipi, istenilen boyutta oluşturulup içerisindeki hücreler istenilen envanter elemanları ile doldurulabilmektedir. Arzu edilirse bu editör ile farklı level tasarımları hazırlanıp level bazlı bir sistem de oluşturulabilir.
 
 <table>
@@ -27,10 +27,10 @@ JSON ile sahne oluşturmaya geçmeden önce bu proje için hazırladığım Leve
   </tr>
 </table>
 
-- **JSON**
+## JSON
 Hazırlanacak olan JSON dosyası ile sahnede istenilen hücreleri oluşturulabilir.
 
-- **Random**
+## Random
 Bu özellik sayesinde stenilen hücre sayısı ve şeklinin içeriği randomize bir şekilde oluşturulabilir.
 
 # Zar Mekaniği
