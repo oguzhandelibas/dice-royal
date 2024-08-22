@@ -3,6 +3,7 @@
 Merhaba,
 17 Ağustos'ta planlamasına başladığım ve 18 Ağustos'ta geliştirmeye geçtiğim bu case çalışmasını sizlere sunmaktan mutluluk duyuyorum. Projeyi geliştirirken, sürdürülebilir bir mimari oluşturmaya özellikle dikkat ettim. Bu sayede, temel oynanış sistemi, farklı hedefler doğrultusunda esnek bir şekilde uyarlanabilir hale getirildi. Şimdi, dilerseniz proje hakkında detaylı bilgilere geçelim.
 
+> Proje geliştirilirken 3.parti araçlar kullanılmamaya özen gösterilmiştir.
 # Oynanış
 ---
 
