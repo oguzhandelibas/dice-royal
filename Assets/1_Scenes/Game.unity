@@ -8481,7 +8481,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelType: 0
-  levelDataType: 2
+  levelDataType: 0
   tableParent: {fileID: 1005782225}
   tileBehaviourPrefab: {fileID: 7091869786494123806, guid: ee9e054f373904537bea1fda88d69d97, type: 3}
 --- !u!1 &1869269900
