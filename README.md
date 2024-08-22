@@ -22,11 +22,6 @@ Ayrıca bana verilen dokümanda belirtilen çizgi şeklindeki harita talebine ek
 - **Level Editor**
 JSON ile sahne oluşturmaya geçmeden önce bu proje için hazırladığım Level Editörümü size tanıtmak istiyorum. Görselde de görüldüğü üzere "OD Projects > Level Editor" yolu takip edilerek editör penceresinden istenilen harita tipi, istenilen boyutta oluşturulup içerisindeki hücreler istenilen envanter elemanları ile doldurulabilmektedir. Arzu edilirse bu editör ile farklı level tasarımları hazırlanıp level bazlı bir sistem de oluşturulabilir.
 
-<p align="center">
-  <img width="556" alt="Line Level" src="https://github.com/user-attachments/assets/7c80f9c4-6030-4e32-86be-d2ea5e0dedd1">
-  <img width="556" alt="Square Level" src="https://github.com/user-attachments/assets/cb1f221b-57d7-47c7-87fe-5eaf1fcd88a8">
-</p>
-
 <table>
   <tr>
     <td><img width="556" alt="Line Level" src="https://github.com/user-attachments/assets/7c80f9c4-6030-4e32-86be-d2ea5e0dedd1"></td>
