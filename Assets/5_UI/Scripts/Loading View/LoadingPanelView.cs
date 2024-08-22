@@ -9,6 +9,7 @@ public class LoadingPanelView: View
     [SerializeField] private TextMeshProUGUI loadingBarText;
     [SerializeField] private Transform loadingIcon;
     public bool active = false;
+    
     public override void Initialize()
     {
         StartCoroutine(LoadingRoutine());
@@ -18,35 +19,41 @@ public class LoadingPanelView: View
     {
         if (active)
         {
+            const float progressSpeed = 0.7f;
+            const float targetValue = 0.95f;
+            const float rotationSpeed = -1f;
+
             loadingBar.value = 0;
-            float progressSpeed = 0.7f;
-            while (loadingBar.value < 0.95f)
+
+            while (loadingBar.value < targetValue)
             {
-                loadingIcon.Rotate(0, 0, -1);
-            
+                loadingIcon.Rotate(0, 0, rotationSpeed);
+
                 loadingBar.value = Mathf.Lerp(loadingBar.value, 1f, progressSpeed * Time.deltaTime);
                 loadingBarText.text = $"{(int)(loadingBar.value * 100)}%";
                 yield return null;
             }
-        
+
             loadingBar.value = 1;
             loadingBarText.text = "100%";
         }
-        
+
         UIManager.Instance.Show<InGamePanelView>();
     }
 
-
+    
     #region EVENT SUBSCRIPTIONS
-
+    
+    private GameSignals _gameSignals;
     private void OnEnable()
     {
-        SO_Manager.Get<GameSignals>().OnGameInitialize += Initialize;
+        _gameSignals = SO_Manager.Get<GameSignals>();
+        _gameSignals.OnGameInitialize += Initialize;
     }
     
     private void OnDisable()
     {
-        SO_Manager.Get<GameSignals>().OnGameInitialize -= Initialize;
+        _gameSignals.OnGameInitialize -= Initialize;
     }
 
     #endregion

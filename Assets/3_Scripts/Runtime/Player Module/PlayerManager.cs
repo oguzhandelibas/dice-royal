@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using ODProjects;
 using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
@@ -19,18 +18,14 @@ public class PlayerManager : MonoBehaviour
         GameManager.Instance.isGameStarted = true;
     }
 
-    private void MovePlayer()
+    private void MovePlayer(int moveCount)
     {
         if(_onMovement) return;
-        int moveCount = diceManager.totalDiceValue;
         _playerSignals.MoveTargetPosition?.Invoke(moveCount);
         _onMovement = true;
     }
 
-    private void MovementCompleted(bool isCompleted)
-    {
-        _onMovement = !isCompleted;
-    }
+    private void MovementCompleted(bool isCompleted) => _onMovement = !isCompleted;
     
     
     #region EVETN SUBSCRIPTION

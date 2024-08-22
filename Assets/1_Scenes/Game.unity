@@ -2423,10 +2423,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioData: {fileID: 11400000, guid: 9381275fb36034e918fe61e5eedac6d8, type: 2}
-  musicSource: {fileID: 1340143682}
   effectSource: {fileID: 1332078090}
-  musicButtonImage: {fileID: 0}
-  soundButtonImage: {fileID: 0}
 --- !u!1 &572137056
 GameObject:
   m_ObjectHideFlags: 0
@@ -6343,10 +6340,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaaac1d04f6aa4f108428ab105768e1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  totalDiceValue: 0
   diceParent: {fileID: 1156271579}
   diceBehaviourPrefab: {fileID: 204307603710519310, guid: 1d8da80caae5c4c41a03be0912fcea60, type: 3}
-  diceData: {fileID: 11400000, guid: ae90098c59f8c418081bad8d3a6403a6, type: 2}
   diceRotationData: {fileID: 11400000, guid: 38122bdeb474243b090fd62eb6f1eb36, type: 2}
 --- !u!1 &1401321041
 GameObject:
@@ -7632,12 +7627,12 @@ Transform:
   - {fileID: 1305466242}
   - {fileID: 1852270819}
   - {fileID: 1400177846}
-  - {fileID: 1954077094}
   - {fileID: 99428931}
   - {fileID: 1695521445}
   - {fileID: 564067567}
   - {fileID: 640600682}
   - {fileID: 998362267}
+  - {fileID: 1954077094}
   - {fileID: 737698806}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8454,7 +8449,7 @@ GameObject:
   m_Layer: 0
   m_Name: Table Manager
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -8486,7 +8481,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelType: 0
-  levelDataType: 1
+  levelDataType: 0
   tableParent: {fileID: 1005782225}
   tileBehaviourPrefab: {fileID: 7091869786494123806, guid: ee9e054f373904537bea1fda88d69d97, type: 3}
 --- !u!1 &1869269900

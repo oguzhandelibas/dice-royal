@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using ODProjects.PoolModule.Data.ScriptableObjects;
-using ODProjects.PoolModule.Enums;
 using ODProjects.PoolModule.Extentions;
 using ODProjects.PoolModule.Interfaces;
 using ODProjects.PoolModule.Signals;

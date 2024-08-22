@@ -317,6 +317,7 @@ namespace ODProjects.LevelEditor
                 if (_selectedElement == SelectedElement.Null) // ERASE
                 {
                     content.text = "N/A";
+                    content.image = null;
                     ChangeButtonState(content, 0, index, SelectedElement.Null);
                 }
                 else  // ADD

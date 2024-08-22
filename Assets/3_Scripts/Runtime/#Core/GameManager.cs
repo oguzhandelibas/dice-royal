@@ -1,14 +1,12 @@
 using ODProjects;
+using UnityEngine;
 
 public class GameManager : AbstractSingleton<GameManager>
 {
-    public bool isGameStarted = false;
-    private GameSignals _gameSignals;
+    [HideInInspector] public bool isGameStarted = false;
     private void Start()
     {
-        _gameSignals = SO_Manager.Get<GameSignals>();
-        
         UIManager.Instance.Show<LoadingPanelView>();
-        _gameSignals.OnGameInitialize?.Invoke();
+        SO_Manager.Get<GameSignals>().OnGameInitialize?.Invoke();
     }
 }

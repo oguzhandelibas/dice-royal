@@ -74,28 +74,17 @@ public static class SO_Manager
 
     private static SO_Type GetScriptableObjectType<T>() where T : ScriptableObject
     {
-        if (typeof(T) == typeof(GameSignals))
-            return SO_Type.GameSignals;
-        if (typeof(T) == typeof(PoolSignals))
-            return SO_Type.PoolSignals;
-        if (typeof(T) == typeof(InventorySignals))
-            return SO_Type.InventorySignals;
-        if (typeof(T) == typeof(PlayerSignals))
-            return SO_Type.PlayerSignals;
-        if (typeof(T) == typeof(DiceSignals))
-            return SO_Type.DiceSignals;
-        if (typeof(T) == typeof(CameraSignals))
-            return SO_Type.CameraSignals;
-        if (typeof(T) == typeof(LevelDatas))
-            return SO_Type.LevelDatas;
-        if (typeof(T) == typeof(SpriteData))
-            return SO_Type.SpriteData;
-        if (typeof(T) == typeof(DiceData))
-            return SO_Type.DiceData;
-        if (typeof(T) == typeof(PlayerData))
-            return SO_Type.PlayerData;
-        if (typeof(T) == typeof(InventoryData))
-            return SO_Type.InventoryData;
+        if (typeof(T) == typeof(GameSignals)) return SO_Type.GameSignals;
+        if (typeof(T) == typeof(PoolSignals)) return SO_Type.PoolSignals;
+        if (typeof(T) == typeof(InventorySignals)) return SO_Type.InventorySignals;
+        if (typeof(T) == typeof(PlayerSignals)) return SO_Type.PlayerSignals;
+        if (typeof(T) == typeof(DiceSignals)) return SO_Type.DiceSignals;
+        if (typeof(T) == typeof(CameraSignals)) return SO_Type.CameraSignals;
+        if (typeof(T) == typeof(LevelDatas)) return SO_Type.LevelDatas;
+        if (typeof(T) == typeof(SpriteData)) return SO_Type.SpriteData;
+        if (typeof(T) == typeof(DiceData)) return SO_Type.DiceData;
+        if (typeof(T) == typeof(PlayerData)) return SO_Type.PlayerData;
+        if (typeof(T) == typeof(InventoryData)) return SO_Type.InventoryData;
         
         throw new ArgumentException($"Unsupported ScriptableObject type: {typeof(T)}");
     }

@@ -9,7 +9,7 @@ public class PlayerSignals :ScriptableObject
     public Func<Transform> GetPlayerTransform;
     public Func<PlayerDirection> GetPlayerDirection;
     public Action<List<TileData>> OnGameReadyToPlay;
-    public Action InitializeMovement;
+    public Action<int> InitializeMovement;
     public Action<int> MoveTargetPosition;
     public Action<bool> MovementComplete;
 

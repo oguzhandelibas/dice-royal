@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class EffectManager : AbstractSingleton<EffectManager>
 {
-    
-    // ReSharper disable Unity.PerformanceAnalysis
     public GameObject GetEffect(EffectType effectType)
     {
         GameObject effect = SO_Manager.Get<PoolSignals>().OnGetObjectFromPool?.Invoke(effectType);
