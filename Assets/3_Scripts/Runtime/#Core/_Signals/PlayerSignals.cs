@@ -12,6 +12,5 @@ public class PlayerSignals :ScriptableObject
     public Action InitializeMovement;
     public Action<int> MoveTargetPosition;
     public Action<bool> MovementComplete;
-    public Action<PlayerType> SetPlayerType;
 
 }

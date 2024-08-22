@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 using System.IO;
 using LevelEditor;
@@ -19,8 +20,9 @@ namespace ODProjects.LevelEditor
         
         #region VARIABLES
         
+        private Vector2Int _gridSize;
         private SelectedElement _selectedElement;
-        private int _elementCount;
+        private int _elementCount = 1;
         
         private bool _targetColorsInitialized;
         private int _boxSize = 25;
@@ -32,7 +34,7 @@ namespace ODProjects.LevelEditor
 
         #region MAIN FUNCTIONS
 
-        [MenuItem("OD Projects/Mobile/LevelEditor", false, 1)]
+        [MenuItem("OD Projects/LevelEditor", false, 1)]
         public static void ShowCreatorWindow()
         {
             LevelEditor window = GetWindow<LevelEditor>();
@@ -59,7 +61,7 @@ namespace ODProjects.LevelEditor
                 foreach (string path in assetPaths)
                 {
                     LevelData levelData = AssetDatabase.LoadAssetAtPath<LevelData>(path);
-                    if (levelData != null)
+                    if (levelData)
                     {
                         levelDataList.Add(levelData);
                         levelDataNameList.Add(levelData.name);
@@ -68,30 +70,29 @@ namespace ODProjects.LevelEditor
 
                 _allLevelDatas = levelDataList.ToArray();
                 _levelDataNames = levelDataNameList.ToArray();
-                if (_currentLevelData == null) _currentLevelData = levelDataList[0];
+                if (!_currentLevelData) _currentLevelData = levelDataList[0];
             }
             else
             {
-                _allLevelDatas = new LevelData[0];
+                _allLevelDatas = Array.Empty<LevelData>();
             }
         }
-        private Vector2 scrollPosition = Vector2.zero;
+        private Vector2 _scrollPosition = Vector2.zero;
 
         private void OnGUI()
         {
             LoadLevelDatas();
             
-            
             _boxSize = 45;
 
             GUI.color = Color.white;
 
-            scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition); // Scrollview başlat
+            _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition); // Scrollview başlat
 
             EditorGUILayout.Space();
             EditorGUILayout.Space();
 
-            if (_currentLevelData != null) Content();
+            if (_currentLevelData) Content();
             CheckPathAndInitialization();
 
             EditorGUILayout.Space();
@@ -100,22 +101,6 @@ namespace ODProjects.LevelEditor
             EditorGUILayout.EndScrollView();
 
             GUI.color = Color.green;
-            
-            /* NEW LEVEL BUTTON
-            if (GUILayout.Button("CREATE NEW LEVEL", GUILayout.Height(40)))
-            {
-                _currentLevelData = ScriptableObject.CreateInstance<LevelData>();
-                string levelDataFolder = "Assets/Resources/ScriptableObjects/Data/LevelData/";
-                string[] assetPaths = Directory.GetFiles(levelDataFolder, "*.asset");
-                _selectedOption = assetPaths.Length;
-
-                string levelName = "LevelData" + (assetPaths.Length + 1);
-                string path = levelDataFolder + levelName + ".asset";
-                
-                AssetDatabase.CreateAsset(_currentLevelData, path);
-                AssetDatabase.SaveAssets();
-                AssetDatabase.Refresh();
-            }*/
         }
 
         private void CheckPathAndInitialization()
@@ -123,9 +108,9 @@ namespace ODProjects.LevelEditor
             if (!_hasInitialize)
             {
                 _spriteData = Resources.Load<SpriteData>("ScriptableObjects/Data/SpriteData");
-                if (!_currentLevelData.HasPath)
+                if (!_currentLevelData.hasPath)
                 {
-                    _currentLevelData.SetArray(_currentLevelData.gridSize.x * _currentLevelData.gridSize.y);
+                    _currentLevelData.SetArray(_currentLevelData.GridSize.x * _currentLevelData.GridSize.y);
                 }
                 _hasInitialize = true;
             }
@@ -146,33 +131,89 @@ namespace ODProjects.LevelEditor
             EditorGUILayout.BeginVertical("box", GUILayout.Width(400));
             _currentLevelData = (LevelData)EditorGUILayout.ObjectField("Level Data", _currentLevelData, typeof(LevelData), false);
             _spriteData = (SpriteData)EditorGUILayout.ObjectField("Sprite Data", _spriteData, typeof(SpriteData), false);
+            
+            
+            
             EditorGUILayout.EndVertical();
             EditorGUILayout.BeginVertical("box", GUILayout.Width(100));
             EditorGUILayout.EndHorizontal();
+            
             EditorGUILayout.BeginVertical("box", GUILayout.Width(300));
             _selectedElement = (SelectedElement)EditorGUILayout.EnumPopup("Selected Element", _selectedElement);
-            
             _elementCount = EditorGUILayout.IntField("Element Count", _elementCount);
+            if(_elementCount == 0) _elementCount = 1;
             
-            EditorGUILayout.Space();
+           _gridSize = _currentLevelData.GridSize;
+           
+            if (_currentLevelData is LineLevelData)
+            {
+                if(_gridSize.x != 1)
+                {
+                    _gridSize.x = 1;
+                    Clear();
+                }
 
-            GridArea();
-            CreateGrid();
-            EditorGUILayout.EndHorizontal();
-            
-            EditorGUILayout.Space(50);
-            
+                if (_gridSize.y < 5)
+                {
+                    _gridSize.y = 5;
+                    Clear();
+                }
+            }
+            else
+            {
+                if (_gridSize.x < 5 || _gridSize.y < 5)
+                {
+                    _gridSize.x = 5;
+                    _gridSize.y = 5;
+                    Clear();
+                }
 
+                if (_gridSize.x != _gridSize.y)
+                {
+                    if (_gridSize.x > _gridSize.y)
+                    {
+                        _gridSize.y = _gridSize.x;
+                    }
+                    else if(_gridSize.x < _gridSize.y)
+                    {
+                        _gridSize.x = _gridSize.y;
+                    }
+                    Clear();
+                }
+            }
+            
+            _gridSize = EditorGUILayout.Vector2IntField("Grid Size", _gridSize);
+            if (_currentLevelData.GridSize != _gridSize)
+            {
+                Clear();
+            }
+            
+            EditorGUILayout.Space(25);
+            
             GUI.color = Color.red;
             if (GUILayout.Button("CLEAR LEVEL", GUILayout.Height(30)))
             {
                 _currentLevelData.ClearPath();
                 _hasInitialize = false;
             }
-
-
+            
             GUI.color = Color.white;
+            
+            EditorGUILayout.Space(25);
+            EditorGUILayout.Space();
+
+            GridArea();
+            CreateGrid();
+            EditorGUILayout.EndHorizontal();
+            
             EditorUtility.SetDirty(_currentLevelData);
+        }
+
+        private void Clear()
+        {
+            _currentLevelData.GridSize = _gridSize;
+            _currentLevelData.ClearPath();
+            _hasInitialize = false;
         }
 
         private void LevelDropdown()
@@ -193,14 +234,13 @@ namespace ODProjects.LevelEditor
         {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Grid Area", GUILayout.Width(75));
-            Vector2Int newGridSize = _currentLevelData.gridSize;
+            Vector2Int newGridSize = _currentLevelData.GridSize;
             EditorGUILayout.EndHorizontal();
 
 
-            if (_currentLevelData.gridSize.x != newGridSize.x || _currentLevelData.gridSize.y != newGridSize.y)
+            if (_currentLevelData.GridSize.x != newGridSize.x || _currentLevelData.GridSize.y != newGridSize.y)
             {
-                _currentLevelData.gridSize.x = newGridSize.x;
-                _currentLevelData.gridSize.y = newGridSize.y;
+                _currentLevelData.GridSize = newGridSize;
 
                 _hasInitialize = false;
                 _currentLevelData.ClearPath();
@@ -213,27 +253,26 @@ namespace ODProjects.LevelEditor
 
         private void CreateGrid()
         {
-            float totalWidth = _currentLevelData.gridSize.x * _boxSize;
-            float startX = (position.width - totalWidth) / 2;
+            float totalWidth = _currentLevelData.GridSize.x * _boxSize;
             GUIContent content = new GUIContent(_elementCount.ToString());
             
             GUI.color = Color.white;
 
-            for (int y = _currentLevelData.gridSize.y - 1; y >= 0; y--)
+            for (int y = _currentLevelData.GridSize.y - 1; y >= 0; y--)
             {
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.Space((position.width - totalWidth) / 2);
     
-                for (int x = 0; x < _currentLevelData.gridSize.x; x++)
+                for (int x = 0; x < _currentLevelData.GridSize.x; x++)
                 {
-                    int index = x * _currentLevelData.gridSize.y + y;
+                    int index = x * _currentLevelData.GridSize.y + y;
 
                     if (index >= 0 && index < _currentLevelData.ArrayLength())
                     {
-                        bool isInnerCell = y > 0 && y < _currentLevelData.gridSize.y - 1 &&
-                                           x > 0 && x < _currentLevelData.gridSize.x - 1;
+                        bool isInnerCell = y > 0 && y < _currentLevelData.GridSize.y - 1 &&
+                                           x > 0 && x < _currentLevelData.GridSize.x - 1;
 
-                        if (_currentLevelData.gridSize.y > 1 && isInnerCell)
+                        if (_currentLevelData.GridSize.y > 1 && isInnerCell)
                         {
                             GridButton(new GUIContent(""), index, false);
                         }
@@ -293,21 +332,10 @@ namespace ODProjects.LevelEditor
         private void ChangeButtonState(GUIContent content, int elementCount, int index, SelectedElement selectedElement)
         {
             content.image = _spriteData.GetTexture(selectedElement);
-            //content.image.width = 30;
-            //content.image.height = 30;
-            Debug.Log($"Index: {index} Element Count: {elementCount} Selected Element: {selectedElement}");
+            //Debug.Log($"Index: {index} Element Count: {elementCount} Selected Element: {selectedElement}");
             _currentLevelData.SetElement(index, elementCount, content, selectedElement);
             string temp1 = content.text;
             content.text = temp1;
-            /*
-            List<int> indexes = new List<int>();
-            if (_currentLevelData.ElementIsAvailable(index)) indexes.Add(index);
-            else indexes.Clear();
-            
-            if (indexes.Count > 0)
-            {
-                
-            }*/
         }
 
         #endregion

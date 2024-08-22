@@ -93,8 +93,8 @@ public class TableManager : MonoBehaviour
         {
             _levelDatas = SO_Manager.Get<LevelDatas>();
             _levelData = _levelDatas.GetLevelData(levelType);
-            gridSize = _levelData.gridSize;
-            _tableElements = _levelData.Elements;
+            gridSize = _levelData.GridSize;
+            _tableElements = _levelData.elements;
         }
         else
         {
@@ -195,7 +195,7 @@ public class TableManager : MonoBehaviour
         SelectedElement selectedElement = (SelectedElement)Random.Range(0, 4);
         Sprite elementSprite = spriteData.GetSprite(selectedElement);
         int elementCount = Random.Range(1, 26);
-        bool isEmpty = selectedElement == SelectedElement.Null || Random.Range(0, 3) == 0;
+        bool isEmpty = selectedElement == SelectedElement.Null || Random.Range(0, 5) == 0;
         
         CreateTile(tableCreationData, selectedElement, elementCount, elementSprite, isEmpty);
     }
@@ -224,7 +224,6 @@ public class TableManager : MonoBehaviour
 
     #region TILE CREATION
     
-   
     private IEnumerator AnimateTileMovementAndScale(TileBehaviour tile, float startY, float endY, float duration)
     {
         float elapsedTime = 0f;

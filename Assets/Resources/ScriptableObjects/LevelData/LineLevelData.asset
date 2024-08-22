@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b1551c0b1c14c8a98f9eee156c768ad, type: 3}
+  m_Name: LineLevelData
+  m_EditorClassIdentifier: 
+  _gridSize: {x: 1, y: 5}
+  elements:
+  - selectedElement: 0
+    elementCount: 0
+    isActive: 1
+    hasElement: 0
+    GuiContent:
+      m_Text: N/A
+      m_Image: {fileID: 0}
+      m_Tooltip: 
+    Color: {r: 1, g: 1, b: 1, a: 1}
+  - selectedElement: 0
+    elementCount: 0
+    isActive: 1
+    hasElement: 0
+    GuiContent:
+      m_Text: N/A
+      m_Image: {fileID: 0}
+      m_Tooltip: 
+    Color: {r: 1, g: 1, b: 1, a: 1}
+  - selectedElement: 0
+    elementCount: 0
+    isActive: 1
+    hasElement: 0
+    GuiContent:
+      m_Text: N/A
+      m_Image: {fileID: 0}
+      m_Tooltip: 
+    Color: {r: 1, g: 1, b: 1, a: 1}
+  - selectedElement: 0
+    elementCount: 0
+    isActive: 1
+    hasElement: 0
+    GuiContent:
+      m_Text: N/A
+      m_Image: {fileID: 0}
+      m_Tooltip: 
+    Color: {r: 1, g: 1, b: 1, a: 1}
+  - selectedElement: 0
+    elementCount: 0
+    isActive: 1
+    hasElement: 0
+    GuiContent:
+      m_Text: N/A
+      m_Image: {fileID: 0}
+      m_Tooltip: 
+    Color: {r: 1, g: 1, b: 1, a: 1}
+  hasPath: 0

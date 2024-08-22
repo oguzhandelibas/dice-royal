@@ -15,6 +15,6 @@ MonoBehaviour:
   LevelData:
     _serializedList:
     - Key: 0
-      Value: {fileID: 11400000, guid: 6cfe51c4f8fc34c5aa550e09933b2fb2, type: 2}
+      Value: {fileID: 11400000, guid: 09794f28cab1941cfa4f2b268ccc986f, type: 2}
     - Key: 1
-      Value: {fileID: 11400000, guid: 72dae8740a7c545779112218d15d8088, type: 2}
+      Value: {fileID: 11400000, guid: 0d4676775b2bb49c1986a47592dd5c99, type: 2}

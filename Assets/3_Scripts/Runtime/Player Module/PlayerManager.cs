@@ -5,21 +5,16 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour
 {
     [SerializeField] private DiceManager diceManager;
-    [SerializeField] private PlayerType playerType;
     [SerializeField] private PlayerBehaviour playerPrefab;
     [SerializeField] private Transform playerParent;
     private bool _onMovement = false;
     private PlayerSignals _playerSignals;
     
-    private void SetPlayerType(PlayerType type)
-    {
-        playerType = type;
-    }
     
     private void InitializePlayer(List<TileData> tileDatas)
     {
         PlayerBehaviour player = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity, playerParent);
-        player.Initialize(playerType, tileDatas);
+        player.Initialize(SO_Manager.Get<InventoryData>().playerType, tileDatas);
         _playerSignals.PlayerInitialized?.Invoke(player.transform);
         GameManager.Instance.isGameStarted = true;
     }
@@ -43,7 +38,6 @@ public class PlayerManager : MonoBehaviour
     private void OnEnable()
     {
         _playerSignals = SO_Manager.Get<PlayerSignals>();
-        _playerSignals.SetPlayerType += SetPlayerType;
         _playerSignals.InitializeMovement += MovePlayer;
         _playerSignals.MovementComplete += MovementCompleted;
         _playerSignals.OnGameReadyToPlay += InitializePlayer;
@@ -51,7 +45,6 @@ public class PlayerManager : MonoBehaviour
 
     private void OnDisable()
     {
-        _playerSignals.SetPlayerType -= SetPlayerType;
         _playerSignals.InitializeMovement -= MovePlayer;
         _playerSignals.MovementComplete -= MovementCompleted;
         _playerSignals.OnGameReadyToPlay -= InitializePlayer;

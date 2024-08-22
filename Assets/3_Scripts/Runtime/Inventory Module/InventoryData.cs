@@ -1,13 +1,11 @@
-using System;
-using System.Collections.Generic;
 using AYellowpaper.SerializedCollections;
 using LevelEditor;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "InventoryData", menuName = "ScriptableObjects/Data/InventoryData")]
 public class InventoryData : ScriptableObject
 {
+    public PlayerType playerType = PlayerType.Car;
     [SerializedDictionary] public SerializedDictionary<SelectedElement, InventoryElement> inventoryElements;
 
     private void OnValidate()

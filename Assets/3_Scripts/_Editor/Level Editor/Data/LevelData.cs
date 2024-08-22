@@ -1,23 +1,35 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace LevelEditor
 {
-    [CreateAssetMenu(fileName = "LevelData", menuName = "ScriptableObjects/Data/Level/LevelData", order = 1)]
     public class LevelData : ScriptableObject
     {
-        public Vector2Int gridSize;
-        private Vector2Int _gridSizeHistory;
-        public Element[] Elements = new Element[0];
+        public Vector2Int _gridSize;
+        public Vector2Int GridSize
+        {
+            get => _gridSize;
+            set
+            {
+                if (_gridSize != value)
+                {
+                    _gridSize = value;
+                    elements = new Element[value.x * value.y];
+                }
+            }
+        }
 
-        public bool HasPath;
+        [HideInInspector] public Element[] elements;
+
+        [HideInInspector] public bool hasPath;
 
         #region GET LEVEL DATA
 
         public SelectedElement GetSelectedElement(int index)
         {
-            return Elements[index].hasElement ? Elements[index].selectedElement : SelectedElement.Null;
+            return elements[index].hasElement ? elements[index].selectedElement : SelectedElement.Null;
         }
 
         #endregion
@@ -25,60 +37,56 @@ namespace LevelEditor
         #region LEVEL DATA CREATION
         public void SetArray(int length)
         {
-            Elements = new Element[length];
+            elements = new Element[length];
             ClearPath();
         }
-        public int ArrayLength() => Elements.Length;
-        public bool ElementIsAvailable(int index) => Elements[index].selectedElement == SelectedElement.Null;
+        public int ArrayLength() => elements.Length;
+        public bool ElementIsAvailable(int index) => elements[index].selectedElement == SelectedElement.Null;
 
         public void ActivateElement(int index, bool isActive)
         {
-            Elements[index].isActive = isActive;
+            elements[index].isActive = isActive;
         }
         
         [Obsolete("Obsolete")]
         public void SetElement(int index, int elementCount, GUIContent guiContent, SelectedElement selectedElement)
         {
-            if (!HasPath) HasPath = true;
-            Elements[index].elementCount = elementCount;
-            Elements[index].selectedElement = selectedElement;
-            Elements[index].GuiContent = guiContent;
-            Elements[index].hasElement = selectedElement != SelectedElement.Null;
+            if (!hasPath) hasPath = true;
+            elements[index].elementCount = elementCount;
+            elements[index].selectedElement = selectedElement;
+            elements[index].GuiContent = guiContent;
+            elements[index].hasElement = selectedElement != SelectedElement.Null;
             SetDirty();
         }
-        public GUIContent GetContent(int index) => Elements[index].GuiContent;
+        public GUIContent GetContent(int index) => elements[index].GuiContent;
         public Color GetColor(int index)
         {
-            return Elements[index].Color;
+            return elements[index].Color;
         }
         
         public void ClearPath()
         {
-            for (int i = 0; i < Elements.Length; i++)
+            for (int i = 0; i < elements.Length; i++)
             {
-                Elements[i].Color = Color.white;
-                Elements[i].GuiContent = new GUIContent("N/A");
-                Elements[i].selectedElement = SelectedElement.Null;
+                elements[i].Color = Color.white;
+                elements[i].GuiContent = new GUIContent("N/A");
+                elements[i].selectedElement = SelectedElement.Null;
             }
 
-            HasPath = false;
+            hasPath = false;
         }
         public void ResetGrid()
         {
             ClearPath();
-            gridSize = new Vector2Int(3,3);
+            GridSize = new Vector2Int(3,3);
         }
 
         #endregion
 
         private void OnValidate()
         {
-            if (_gridSizeHistory != gridSize)
-            {
-                Elements = new Element[gridSize.x * gridSize.y];
-                _gridSizeHistory = gridSize;
-            }
             
         }
     }
+    
 }
