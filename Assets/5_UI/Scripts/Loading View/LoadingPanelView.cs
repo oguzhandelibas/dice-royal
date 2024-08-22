@@ -19,7 +19,7 @@ public class LoadingPanelView: View
         if (active)
         {
             loadingBar.value = 0;
-            float progressSpeed = 0.5f;
+            float progressSpeed = 0.7f;
             while (loadingBar.value < 0.95f)
             {
                 loadingIcon.Rotate(0, 0, -1);

@@ -59,8 +59,6 @@ public class PlayerBehaviour : MonoBehaviour
         GameObject confetti2 = EffectManager.Instance.GetEffect(EffectType.Confetti);
         confetti1.transform.position = transform.position + new Vector3(1,-0.5f, 0);
         confetti2.transform.position = transform.position + new Vector3(-1,-0.5f, 0);
-        
-        
     }
     
     private int GetCurrentIndex()
@@ -94,17 +92,12 @@ public class PlayerBehaviour : MonoBehaviour
         
         GameObject effect = EffectManager.Instance.GetEffect(EffectType.JumpEffect);
         effect.transform.position = transform.position+(Vector3.up*.15f);
-        effect.transform.rotation = Quaternion.Euler(90,0,0);
         
         while (elapsedTime < duration)
         {
             float progress = elapsedTime / duration;
-
-            // Pozisyon animasyonu: zıplama etkisi
             float heightOffset = Mathf.Sin(progress * Mathf.PI) * jumpHeight;
             transform.position = Vector3.Lerp(startPosition, targetPosition, progress) + Vector3.up * heightOffset;
-
-            // büyüyüp küçülme etkisi
             transform.localScale = Vector3.Lerp(originalScale, jumpScale, Mathf.Sin(progress * Mathf.PI));
 
             elapsedTime += Time.deltaTime;
