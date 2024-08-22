@@ -1815,7 +1815,7 @@ MonoBehaviour:
   m_Padding:
     m_Left: 0
     m_Right: 0
-    m_Top: 20
+    m_Top: 90
     m_Bottom: 0
   m_ChildAlignment: 1
   m_StartCorner: 0
@@ -3657,7 +3657,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 20, y: -40}
+  m_AnchoredPosition: {x: 20, y: -115}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &830216735
@@ -5929,7 +5929,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 3a5c2da476d034de69470425477e744f, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.05
+  m_Volume: 0.03
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -6049,7 +6049,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 300}
+  m_SizeDelta: {x: 0, y: 424.8247}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &1354287181
 CanvasRenderer:
@@ -8481,7 +8481,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelType: 0
-  levelDataType: 0
+  levelDataType: 2
   tableParent: {fileID: 1005782225}
   tileBehaviourPrefab: {fileID: 7091869786494123806, guid: ee9e054f373904537bea1fda88d69d97, type: 3}
 --- !u!1 &1869269900
@@ -9357,7 +9357,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 117, y: 0}
+  m_AnchoredPosition: {x: 117, y: -16}
   m_SizeDelta: {x: 380, y: 280}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &2021779243

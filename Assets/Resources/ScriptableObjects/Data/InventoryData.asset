@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcaf2049949294fcfb75b394b2988a05, type: 3}
   m_Name: InventoryData
   m_EditorClassIdentifier: 
-  playerType: 1
+  playerType: 0
   inventoryElements:
     _serializedList:
     - Key: 1
