@@ -1,7 +1,5 @@
 # Dice Royal
 ---
-Merhaba,
-17 Ağustos'ta planlamasına başladığım ve 18 Ağustos'ta geliştirmeye geçtiğim bu case çalışmasını sizlere sunmaktan mutluluk duyuyorum. Projeyi geliştirirken, sürdürülebilir bir mimari oluşturmaya özellikle dikkat ettim. Bu sayede, temel oynanış sistemi, farklı hedefler doğrultusunda esnek bir şekilde uyarlanabilir hale getirildi. Şimdi, dilerseniz proje hakkında detaylı bilgilere geçelim.
 
 > Proje geliştirilirken 3.parti araçlar kullanılmamaya özen gösterilmiştir.
 # Oynanış
@@ -49,6 +47,3 @@ Projenin genel yapısını sürdürülebilir ve olabildiğince karmaşıklıktan
 <p align="center">
 <img width="293" alt="Screenshot 2024-08-22 at 08 38 31" src="https://github.com/user-attachments/assets/ab100159-740f-4f73-967b-281c78bd46d6">
 </p>
-
-# Teşekkür
-Vaktinizi ayırıp, titizlikle hazırladığım bu çalışmayı inceleyeceğiniz için şimdiden teşekkür ederim. Sizlerle tanışmak için sabırsızlanıyorum. 
